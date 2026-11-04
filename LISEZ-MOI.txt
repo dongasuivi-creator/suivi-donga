@@ -1,0 +1,22 @@
+SUIVI HEBDO PROGRESSION – DONGA · Version 11
+
+CONTENU DU DOSSIER
+  index.html, noyau.js, enseignant.js, ae.js, censeur.js, direction.js, encadreur.js
+  donnees/  (un fichier par discipline : MATHS.js, PCT.js, SVT.js, ESPAGNOL.js, ANGLAIS.js,
+             ALLEMAND.js, FRANCAIS.js, HG.js, PHILO.js, EPS.js)
+
+MISE EN LIGNE SUR GITHUB (une seule fois)
+  1. Dans Supabase > SQL Editor : coller supabase-ajout7.sql puis Run.
+  2. Sur GitHub, dans votre dépôt : Add file > Upload files.
+  3. Glissez TOUT le contenu de ce dossier : les 7 fichiers .js/.html ET le dossier « donnees ».
+     (le dossier donnees doit rester à côté de index.html)
+  4. Commit changes. Attendez 1 à 2 minutes puis rechargez le site.
+  5. Vérifiez : le pied de page affiche « Version 11 ».
+
+METTRE À JOUR UNE SEULE DISCIPLINE PLUS TARD
+  Remplacez uniquement le fichier donnees/NOM.js correspondant (par exemple donnees/PCT.js).
+  Pour que les téléphones prennent tout de suite la nouvelle version, ouvrez index.html sur GitHub
+  et changez les chiffres « ?v=11 » en « ?v=12 » (dans les lignes <script src=...>), ainsi que
+  VERSION_SITE="11" au début de noyau.js.
+
+SI LE SITE NE S'AFFICHE PAS : un fichier manque ou n'est pas à la bonne place. Comparez avec ce dossier.
