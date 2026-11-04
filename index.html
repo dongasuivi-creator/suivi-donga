@@ -66,7 +66,7 @@ footer{text-align:center;color:var(--mut);font-size:13px;padding:20px}
 <header><h1>Suivi Hebdo Progression – Donga</h1><small>Données fictives pendant la phase de test</small></header>
 <main id="app"></main>
 <div id="rapport" class="rap"></div>
-<footer>Conçu par Francis EGOUNLETI · Remarques : WhatsApp 01 97 89 09 52</footer>
+<footer>Conçu par Francis EGOUNLETI · Remarques : WhatsApp 01 97 89 09 52<br><span style="font-size:12px">Version 9 · 4 novembre 2026</span></footer>
 
 <script>
 /* ====== Configuration du projet (clés publiques, faites pour être visibles) ====== */
@@ -464,8 +464,14 @@ function connexionRole(role){
     const em=$("#em").value.trim().toLowerCase();
     if(!/^\S+@\S+\.\S+$/.test(em))return note($("#m"),"Adresse e-mail invalide");
     $("#go").disabled=true;
-    try{await envoyerCode(em);note($("#m"),"Code envoyé. Regardez votre boîte e-mail (et les courriers indésirables).","good");$("#bloc2").style.display="block"}
-    catch(e){note($("#m"),e.message)}
+    try{
+      await envoyerCode(em);
+      note($("#m"),"Code envoyé. Il peut mettre quelques minutes à arriver : regardez votre boîte e-mail et les courriers indésirables (spam). Ne redemandez pas tout de suite.","good");
+      $("#bloc2").style.display="block";
+      let t=60;const bt=$("#go");bt.disabled=true;
+      const iv=setInterval(()=>{t--;if(t<=0){clearInterval(iv);bt.disabled=false;bt.textContent="Recevoir un nouveau code"}else bt.textContent="Nouveau code possible dans "+t+" s"},1000);
+      return;
+    }catch(e){note($("#m"),/rate|limit|seconds/i.test(e.message)?"Trop de demandes. Attendez une minute puis réessayez, ou utilisez le dernier code reçu.":e.message)}
     $("#go").disabled=false;
   };
   $("#ok").onclick=async()=>{
