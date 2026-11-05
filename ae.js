@@ -55,7 +55,7 @@ async function aeValider(){
       <p class="mut">${att.length} à valider · ${rows.filter(r=>r.statut==="valide").length} validé(s) · ${sans.length} enseignant(s) sans point</p>
       ${att.length?'<button class="ok" id="tout">Tout valider ('+att.length+')</button>':""}<div id="m"></div></div>
       ${rows.map(carteSoum).join("")}
-      ${sans.length?`<div class="card"><h3>Sans point cette semaine</h3>${sans.map(e=>`<p>${esc(e.nom)} <button class="sec sm" data-saisir="${e.id}">Saisir pour lui</button> <a href="${lienWA(e.whatsapp,"Bonjour "+e.nom+", merci d'envoyer votre point de progression de la semaine "+s+" sur la plateforme.")}" target="_blank" rel="noopener">Relancer</a></p>`).join("")}</div>`:""}`;
+      ${sans.length?`<div class="card"><h3>Sans point cette semaine</h3>${sans.map(e=>`<p>${esc(e.nom)} <button class="sec sm" data-saisir="${e.id}">Saisir pour lui</button> <a href="${lienWA(e.whatsapp,"Mr/Mme "+e.nom+", merci d'envoyer votre point de progression de la semaine "+s+" sur la plateforme : "+SITE_URL+"\nPensez à cocher aussi toutes les séquences déjà exécutées, pas seulement celles de cette semaine. Merci.")}" target="_blank" rel="noopener">Relancer</a></p>`).join("")}</div>`:""}`;
     if($("#tout"))$("#tout").onclick=()=>majStatut(att.map(a=>a.id),"valide");
     z.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>majStatut([b.dataset.v],"valide"));
     z.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>majStatut([b.dataset.r],"rejete"));

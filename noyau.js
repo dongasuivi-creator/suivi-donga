@@ -49,8 +49,16 @@ const ETAT={retard:"Retard",conforme:"Conforme",avance:"En avance",non_commence:
 const STAT={en_attente:"À valider",valide:"Validé",rejete:"Rejeté"};
 function note(el,txt,type){el.innerHTML=txt?`<div class="msg ${type||"err"}">${esc(txt)}</div>`:""}
 function aujourdhui(){return new Date().toISOString().slice(0,10)}
-function semDefaut(){try{return localStorage.getItem("sdh.sem")||"1"}catch(e){return "1"}}
-function semSauve(v){try{localStorage.setItem("sdh.sem",v)}catch(e){}}
+const SITE_URL="https://suivi-donga.ddes-donga.workers.dev";
+/* Semaines de cours (numéro, début, fin) : sert à proposer la semaine en cours par défaut */
+const SEMAINES_REF=[[1,"2026-09-14","2026-09-18"],[2,"2026-09-21","2026-09-25"],[3,"2026-09-28","2026-10-02"],[4,"2026-10-05","2026-10-09"],[5,"2026-10-12","2026-10-16"],[6,"2026-10-19","2026-10-23"],[7,"2026-10-26","2026-10-30"],[8,"2026-11-02","2026-11-06"],[9,"2026-11-23","2026-11-27"],[10,"2026-11-30","2026-12-04"],[11,"2026-12-07","2026-12-11"],[12,"2026-12-14","2026-12-17"],[13,"2027-01-04","2027-01-08"],[14,"2027-01-25","2027-01-29"],[15,"2027-02-01","2027-02-05"],[16,"2027-02-08","2027-02-12"],[17,"2027-02-15","2027-02-18"],[18,"2027-03-01","2027-03-05"],[19,"2027-03-22","2027-03-23"],[19,"2027-04-08","2027-04-09"],[20,"2027-04-12","2027-04-16"],[21,"2027-04-19","2027-04-23"],[22,"2027-04-26","2027-04-30"]];
+function semCourante(){
+  const d=aujourdhui();let n=1;
+  for(const w of SEMAINES_REF){if(w[1]<=d)n=w[0];else break}
+  return String(n);
+}
+function semDefaut(){return semCourante()}
+function semSauve(v){}
 function csv(rows){return rows.map(r=>r.map(c=>`"${String(c==null?"":c).replace(/"/g,'""')}"`).join(";")).join("\r\n")}
 function telecharger(nom,txt){const b=new Blob(["﻿"+txt],{type:"text/csv;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=nom;a.click()}
 function entete(titre,retour){return `<div class="row" style="align-items:center"><h2 style="flex:3">${esc(titre)}</h2>${retour?`<button class="sec sm" id="btn-retour" style="flex:0 0 auto">← Accueil</button>`:""}</div>`}
@@ -203,7 +211,7 @@ function formDefaut(code){
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="11";
+const VERSION_SITE="12";
 const REF_MAT = {};
 function chargerMat(code){
   if(REF_MAT[code])return Promise.resolve(true);
@@ -453,3 +461,57 @@ function connexionRole(role){
 }
 function deconnexion(){saveSess(null);accueil()}
 
+
+/* ====== Point des établissements ayant renseigné, par matière ====== */
+const MOIS_FR=["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+function periodeSemaine(n){
+  const w=SEMAINES_REF.find(x=>x[0]===n);if(!w)return "";
+  const a=w[1].split("-"),b=w[2].split("-"),j=x=>x.length&&x;
+  const da=a[2],db=b[2];
+  if(a[1]===b[1])return "Semaine du "+da+" au "+db+" "+MOIS_FR[+b[1]-1]+" "+b[0];
+  return "Semaine du "+da+" "+MOIS_FR[+a[1]-1]+" au "+db+" "+MOIS_FR[+b[1]-1]+" "+b[0];
+}
+function tableauEtabs(rows,sem,toutes){
+  const par={};
+  rows.forEach(r=>{const g=par[r.matiere]=par[r.matiere]||{};g[slug(r.etablissement)]=r.etablissement});
+  let cols=ORDRE.map(o=>({nom:o[0],etabs:Object.values(par[o[1]]||{}).sort((a,b)=>a.localeCompare(b,"fr"))}));
+  if(!toutes)cols=cols.filter(c=>c.etabs.length);
+  const n=new Date(),p2=x=>String(x).padStart(2,"0");
+  const stamp=p2(n.getDate())+"/"+p2(n.getMonth()+1)+"/"+String(n.getFullYear()).slice(2)+" à "+p2(n.getHours())+"h"+p2(n.getMinutes())+"min";
+  return {sem,cols,max:Math.max(0,...cols.map(c=>c.etabs.length)),periode:periodeSemaine(sem),stamp};
+}
+function etabsHTML(T){
+  if(!T.cols.length)return '<p class="mut">Aucun collège n\'a renseigné cette semaine dans votre périmètre.</p>';
+  let h='<table class="te"><thead><tr>'+T.cols.map(c=>'<th>'+esc(c.nom)+' <span class="mut">('+c.etabs.length+')</span></th>').join("")+'</tr></thead><tbody>';
+  for(let i=0;i<T.max;i++)h+='<tr>'+T.cols.map(c=>'<td>'+esc(c.etabs[i]||"")+'</td>').join("")+'</tr>';
+  return h+'</tbody></table>';
+}
+function etabsEntete(T){return {t:"Semaine N°"+T.sem,s:"POINT DES ETABLISSEMENTS AYANT RENSEIGNE PAR MATIERE ESG",p:T.periode,e:"(point établi le "+T.stamp+")"}}
+function etabsExcel(T){
+  const E=etabsEntete(T),H=v=>({v,s:3}),C=v=>({v,s:2});
+  const rows=[[{v:E.t,s:1}],[{v:E.s,s:1}],[E.p],[E.e],[],{v:T.cols.map(c=>H(c.nom)),h:24}];
+  for(let i=0;i<T.max;i++)rows.push(T.cols.map(c=>C(c.etabs[i]||"")));
+  rows.push([]);rows.push(["Total collèges"].concat([]));
+  rows.pop();rows.push({v:T.cols.map(c=>({v:c.etabs.length+" collège(s)",s:3})),h:20});
+  telechargerBlob(classeurXLSX([{nom:"Établissements par matière",rows,larg:T.cols.map(()=>24)}]),"Etablissements-par-matiere-S"+T.sem+".xlsx");
+}
+function etabsPDF(T){
+  const E=etabsEntete(T);
+  let h='<div style="text-align:center;margin-bottom:8px"><div style="font-size:20px;font-weight:700">'+esc(E.t)+'</div><div style="font-size:11px;font-weight:700">'+esc(E.s)+'</div><div style="font-size:10px;font-weight:700">'+esc(E.p)+'</div><div style="font-size:10px;font-weight:700">'+esc(E.e)+'</div></div>'+etabsHTML(T);
+  $("#rapport").innerHTML=h;
+  const st=document.createElement("style");st.id="pg-land";st.textContent="@page{size:A4 landscape;margin:8mm}";document.head.appendChild(st);
+  const ancien=document.title;document.title="Etablissements-par-matiere-S"+T.sem;
+  document.body.classList.add("mode-rapport");
+  const fin=()=>{document.body.classList.remove("mode-rapport");document.title=ancien;const s=document.getElementById("pg-land");if(s)s.remove();window.removeEventListener("afterprint",fin)};
+  window.addEventListener("afterprint",fin);
+  setTimeout(()=>window.print(),50);
+}
+function blocEtabs(){
+  return '<h3 style="margin-top:14px">Établissements ayant renseigné, par matière</h3><div class="scroll" id="te"></div><button class="ok" id="tx">Télécharger en Excel</button><button class="ko" id="tp">Télécharger en PDF</button>';
+}
+function brancherEtabs(rows,s,toutes){
+  const T=tableauEtabs(rows,s,toutes);
+  $("#te").innerHTML=etabsHTML(T);
+  $("#tx").onclick=()=>etabsExcel(tableauEtabs(rows,s,toutes));
+  $("#tp").onclick=()=>etabsPDF(tableauEtabs(rows,s,toutes));
+}

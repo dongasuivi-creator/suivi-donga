@@ -49,6 +49,7 @@ async function encPoints(){
       <button class="ok" id="bx">Télécharger en Excel</button><button class="ko" id="bp">Télécharger en PDF</button><button class="sec" id="ex">Détail (CSV)</button>
       <h3 style="margin-top:14px">Tableau de synthèse</h3><div class="scroll" id="tm"></div><p class="mut">Faites glisser le tableau pour voir toutes les colonnes.</p>
       <div id="mq"></div>
+      ${blocEtabs()}
       <h3 style="margin-top:14px">Détail</h3><div class="scroll"><table><tr><th>Collège</th><th>Disc.</th><th>Enseignant</th><th>Classe</th><th>Prévu</th><th>Réalisé</th><th>État</th><th>Motif</th></tr>
       ${rows.map(x=>`<tr><td>${esc(x.etablissement)}</td><td>${esc(x.matiere)}</td><td>${esc(x.enseignant)}</td><td>${esc(x.classe_formulaire)} ${esc(x.division)}</td><td>${x.taux_prevu}</td><td>${x.taux_realise}</td><td>${esc(ETAT[x.etat]||"")}</td><td>${esc(x.motif)}</td></tr>`).join("")}</table></div>`;
       const calc=()=>{
@@ -60,7 +61,7 @@ async function encPoints(){
         $("#mq").innerHTML=S.manquants.length?`<p class="mut"><b>Collèges sans point validé :</b> ${S.manquants.map(esc).join(", ")}</p>`:"";
         return S;
       };
-      calc();$("#dt").onchange=calc;$("#eb").oninput=calc;
+      calc();brancherEtabs(rows,s,ENC.p.role==='IPD');$("#dt").onchange=calc;$("#eb").oninput=calc;
       $("#bx").onclick=()=>dirExcel(calc());
       $("#bp").onclick=()=>dirPDF(calc());
       $("#ex").onclick=()=>telecharger("points-valides-S"+s+".csv",csv([["Collège","Discipline","Matricule","Enseignant","Classe","Division","Semaine","Prévu %","Réalisé %","Écart","État","Motif"]].concat(rows.map(x=>[x.etablissement,x.matiere,x.matricule,x.enseignant,x.classe_formulaire,x.division,x.semaine,x.taux_prevu,x.taux_realise,x.ecart,ETAT[x.etat]||"",x.motif]))));

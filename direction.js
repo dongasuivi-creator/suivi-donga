@@ -41,6 +41,7 @@ async function dirPoints(){
       <button class="ok" id="bx">Télécharger en Excel</button><button class="ko" id="bp">Télécharger en PDF</button><button class="sec" id="ex">Détail (CSV)</button>
       <h3 style="margin-top:14px">Tableau du ministère</h3><div class="scroll" id="tm"></div><p class="mut">Faites glisser le tableau pour voir toutes les colonnes.</p>
       <div id="mq"></div>
+      ${blocEtabs()}
       <h3 style="margin-top:14px">Détail</h3><div class="scroll"><table><tr><th>Collège</th><th>Disc.</th><th>Enseignant</th><th>Classe</th><th>Prévu</th><th>Réalisé</th><th>État</th><th>Motif</th></tr>
       ${rows.map(r=>`<tr><td>${esc(r.etablissement)}</td><td>${esc(r.matiere)}</td><td>${esc(r.enseignant)}</td><td>${esc(r.classe_formulaire)} ${esc(r.division)}</td><td>${r.taux_prevu}</td><td>${r.taux_realise}</td><td>${esc(ETAT[r.etat]||"")}</td><td>${esc(r.motif)}</td></tr>`).join("")}</table></div>`;
       const calc=()=>{
@@ -51,7 +52,7 @@ async function dirPoints(){
         $("#mq").innerHTML=S.manquants.length?`<p class="mut"><b>Collèges sans point validé :</b> ${S.manquants.map(esc).join(", ")}</p>`:"";
         return S;
       };
-      calc();
+      calc();brancherEtabs(rows,s,true);
       $("#dt").onchange=calc;$("#eb").oninput=calc;
       $("#bx").onclick=()=>dirExcel(calc());
       $("#bp").onclick=()=>dirPDF(calc());
