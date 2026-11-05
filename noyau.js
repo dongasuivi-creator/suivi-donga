@@ -1,6 +1,6 @@
 /* ====== Configuration du projet (clés publiques, faites pour être visibles) ====== */
 const CFG={url:"https://wjjwlmqlzizbgmboyggp.supabase.co",key:"sb_publishable_l2QHESU7V6Ap_41NtW7oLA_aA0Z0lG6"};
-const MATIERES=["MATHS","PCT","SVT","ESPAGNOL","ANGLAIS","ALLEMAND","FRANCAIS","HG","PHILO","EPS"];
+const MATIERES=["MATHS","PCT","SVT","ESPAGNOL","ANGLAIS","ALLEMAND","FRANCAIS","HG","PHILO","EPS","ECONOMIE"];
 const CLASSES=["6ème","5ème","4ème","3ème","2nde","1ère","Tle"];
 
 /* ====== Petit client Supabase (sans bibliothèque externe) ====== */
@@ -118,8 +118,8 @@ function telechargerBlob(blob,nom){const a=document.createElement("a");a.href=UR
 const fr=n=>String(Math.round(n*10)/10).replace(".",",");
 const slug=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"");
 const estExamen=c=>c==="3ème"||String(c).indexOf("Tle")===0;
-const NOM_MAT={MATHS:"Mathématiques",PCT:"PCT",SVT:"SVT",ESPAGNOL:"Espagnol",ANGLAIS:"Anglais",ALLEMAND:"Allemand",FRANCAIS:"Français",HG:"Histoire-Géo",PHILO:"Philosophie",EPS:"EPS"};
-const ORDRE=[["ALLEMAND","ALLEMAND"],["ANGLAIS","ANGLAIS"],["ECONOMIE",null],["EPS","EPS"],["ESPAGNOL","ESPAGNOL"],["FRANCAIS","FRANCAIS"],["HIST-GEO","HG"],["MATHEMATIQUES","MATHS"],["PCT","PCT"],["PHILOSOPHIE","PHILO"],["SVT","SVT"]];
+const NOM_MAT={MATHS:"Mathématiques",PCT:"PCT",SVT:"SVT",ESPAGNOL:"Espagnol",ANGLAIS:"Anglais",ALLEMAND:"Allemand",FRANCAIS:"Français",HG:"Histoire-Géo",PHILO:"Philosophie",ECONOMIE:"Économie",EPS:"EPS"};
+const ORDRE=[["ALLEMAND","ALLEMAND"],["ANGLAIS","ANGLAIS"],["ECONOMIE","ECONOMIE"],["EPS","EPS"],["ESPAGNOL","ESPAGNOL"],["FRANCAIS","FRANCAIS"],["HIST-GEO","HG"],["MATHEMATIQUES","MATHS"],["PCT","PCT"],["PHILOSOPHIE","PHILO"],["SVT","SVT"]];
 
 /* Synthèse départementale à partir des points validés (vue points_valides) */
 function synthese(rows,sem,dateFr,nom,tousEtabs){
