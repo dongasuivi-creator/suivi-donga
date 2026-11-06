@@ -187,7 +187,7 @@ function dirPDF(S){
   if(S.manquants.length)h+='<div style="margin-top:8px"><b>Collèges sans point validé :</b> '+S.manquants.map(esc).join(", ")+"</div>";
   h+='<div class="sign"><div>Établi par<br>'+esc(S.nom||"")+'</div><div>Le Directeur Départemental</div></div>';
   $("#rapport").innerHTML=h;
-  const st=document.createElement("style");st.id="pg-land";st.textContent="@page{size:A4 landscape;margin:10mm}";document.head.appendChild(st);
+  const st=document.createElement("style");st.id="pg-land";st.textContent="@page{size:A4 "+orientAuto()+";margin:10mm}";document.head.appendChild(st);
   const ancien=document.title;document.title="Point-execution-programmes-Donga-S"+S.sem;
   document.body.classList.add("mode-rapport");
   const fin=()=>{document.body.classList.remove("mode-rapport");document.title=ancien;const s=document.getElementById("pg-land");if(s)s.remove();window.removeEventListener("afterprint",fin)};
@@ -211,7 +211,7 @@ function formDefaut(code){
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="15";
+const VERSION_SITE="16";
 const REF_MAT = {};
 function chargerScript(url){
   return new Promise(res=>{
@@ -483,6 +483,15 @@ function periodeSemaine(n){
   if(a[1]===b[1])return "Semaine du "+da+" au "+db+" "+MOIS_FR[+b[1]-1]+" "+b[0];
   return "Semaine du "+da+" "+MOIS_FR[+a[1]-1]+" au "+db+" "+MOIS_FR[+b[1]-1]+" "+b[0];
 }
+function orientAuto(){
+  const r=$("#rapport"),a=r.getAttribute("style");
+  r.style.cssText="display:block;position:absolute;left:-9999px;top:0;width:718px;font-size:9px";
+  document.body.classList.add("mode-rapport-mesure");
+  let large=false;r.querySelectorAll("table").forEach(t=>{const n=Math.max(0,...[...t.rows].map(x=>x.cells.length));if(t.scrollWidth>718||n>6)large=true});
+  document.body.classList.remove("mode-rapport-mesure");
+  if(a===null)r.removeAttribute("style");else r.setAttribute("style",a);
+  return large?"landscape":"portrait";
+}
 function tableauEtabs(rows,sem,toutes){
   const par={};
   rows.forEach(r=>{const g=par[r.matiere]=par[r.matiere]||{};g[slug(r.etablissement)]=r.etablissement});
@@ -511,7 +520,7 @@ function etabsPDF(T){
   const E=etabsEntete(T);
   let h='<div style="text-align:center;margin-bottom:8px"><div style="font-size:20px;font-weight:700">'+esc(E.t)+'</div><div style="font-size:11px;font-weight:700">'+esc(E.s)+'</div><div style="font-size:10px;font-weight:700">'+esc(E.p)+'</div><div style="font-size:10px;font-weight:700">'+esc(E.e)+'</div></div>'+etabsHTML(T);
   $("#rapport").innerHTML=h;
-  const st=document.createElement("style");st.id="pg-land";st.textContent="@page{size:A4 landscape;margin:8mm}";document.head.appendChild(st);
+  const st=document.createElement("style");st.id="pg-land";st.textContent="@page{size:A4 "+orientAuto()+";margin:8mm}";document.head.appendChild(st);
   const ancien=document.title;document.title="Etablissements-par-matiere-S"+T.sem;
   document.body.classList.add("mode-rapport");
   const fin=()=>{document.body.classList.remove("mode-rapport");document.title=ancien;const s=document.getElementById("pg-land");if(s)s.remove();window.removeEventListener("afterprint",fin)};
@@ -558,10 +567,10 @@ function sansPointPDF(D){
   if(D.aCommune)h+='<div style="height:10px"></div>'+t(["Commune","Collèges inscrits","Sans point validé","Taux renseigné"],D.communes.map(c=>[c.c,c.t,c.m,c.t?Math.round(1000*(c.t-c.m)/c.t)/10+" %":""]));
   h+='<div style="height:10px"></div>'+(D.manq.length?t(["N°","Collège","Commune"],D.manq.map((e,i)=>[i+1,e.nom,e.commune||""])):'<p>Tous les collèges inscrits ont au moins un point validé.</p>');
   $("#rapport").innerHTML=h;
-  const st=document.createElement("style");st.id="pg-port";st.textContent="@page{size:A4 portrait;margin:10mm}";document.head.appendChild(st);
+  const st=document.createElement("style");st.id="pg-land";st.textContent="@page{size:A4 "+orientAuto()+";margin:10mm}";document.head.appendChild(st);
   const ancien=document.title;document.title="Colleges-sans-point-valide-S"+D.sem;
   document.body.classList.add("mode-rapport");
-  const fin=()=>{document.body.classList.remove("mode-rapport");document.title=ancien;const s=document.getElementById("pg-port");if(s)s.remove();window.removeEventListener("afterprint",fin)};
+  const fin=()=>{document.body.classList.remove("mode-rapport");document.title=ancien;const s=document.getElementById("pg-land");if(s)s.remove();window.removeEventListener("afterprint",fin)};
   window.addEventListener("afterprint",fin);
   setTimeout(()=>window.print(),50);
 }
