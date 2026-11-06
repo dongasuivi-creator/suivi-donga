@@ -1,0 +1,26 @@
+/* Mathématiques – Quatrième : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["4E"] = {
+  "S1": {"sa":"SA N°1 : CONFIGURATIONS DU PLAN","activite":"Angles au centre d'un cercle."},
+  "S2": {"sa":"SA N°1 : CONFIGURATIONS DU PLAN","activite":"Distance."},
+  "S3": {"sa":"SA N°1 : CONFIGURATIONS DU PLAN","activite":"Triangles."},
+  "S4": {"sa":"SA N°1 : CONFIGURATIONS DU PLAN","activite":"Triangles (suite)."},
+  "S5": {"sa":"SA N°1 : CONFIGURATIONS DU PLAN","activite":"Triangles (suite)."},
+  "S6": {"sa":"SA N°1 : CONFIGURATIONS DU PLAN","activite":"Triangles (suite et fin). Polygones réguliers."},
+  "S7": {"sa":"SA N°1 : CONFIGURATIONS DU PLAN","activite":"Nombres décimaux. Nombres rationnels."},
+  "S8": {"sa":"SA N°1 : CONFIGURATIONS DU PLAN","activite":"Nombres rationnels (suite et fin)."},
+  "S9": {"sa":"SA N°1 : CONFIGURATIONS DU PLAN","activite":"Puissances. Calculs sur les expressions algébriques."},
+  "S10": {"sa":"SA N°1 : CONFIGURATIONS DU PLAN","activite":"Calculs sur les expressions algébriques (suite et fin)."},
+  "S11": {"sa":"SA N°2 : CONFIGURATIONS DE L'ESPACE","activite":"Pyramide. Cône de révolution."},
+  "S12": {"sa":"SA N°2 : CONFIGURATIONS DE L'ESPACE","activite":"Cône de révolution (suite et fin). Représentation en perspective cavalière de quelques solides de l'espace."},
+  "S13": {"sa":"SA N°2 : CONFIGURATIONS DE L'ESPACE","activite":"Sphère-Boule. Notion de plan et de droite de l'espace."},
+  "S14": {"sa":"SA N°2 : CONFIGURATIONS DE L'ESPACE","activite":"Notion de plan et de droite de l'espace (suite et fin). Arithmétique : PPCM et PGCD."},
+  "S15": {"sa":"SA N°2 : CONFIGURATIONS DE L'ESPACE","activite":"Arithmétique : PPCM et PGCD (suite et fin)."},
+  "S16": {"sa":"SA N°3 : APPLICATIONS DU PLAN","activite":"Symétrie centrale. Symétrie orthogonale."},
+  "S17": {"sa":"SA N°3 : APPLICATIONS DU PLAN","activite":"Symétrie orthogonale (suite et fin). Translation."},
+  "S18": {"sa":"SA N°3 : APPLICATIONS DU PLAN","activite":"Projection."},
+  "S19a": {"sa":"SA N°4 : ORGANISATION DES DONNEES","activite":null},
+  "S19b": {"sa":"SA N°4 : ORGANISATION DES DONNEES","activite":null},
+  "S20": {"sa":"SA N°4 : ORGANISATION DES DONNEES","activite":"Équations et inéquations."},
+  "S21": {"sa":"SA N°4 : ORGANISATION DES DONNEES","activite":"Proportionnalité."},
+  "S22": {"sa":"SA N°4 : ORGANISATION DES DONNEES","activite":"Statistique."}
+};

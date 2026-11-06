@@ -1,0 +1,26 @@
+/* Mathématiques – Terminale A2 et B : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["TLE_A2B"] = {
+  "S1": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Généralités sur les fonctions."},
+  "S2": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Notions de limite et continuité."},
+  "S3": {"sa":"SA N°1 : LIEUX GEOMETRIQUES","activite":"Notions de limite et continuité (suite et fin)."},
+  "S4": {"sa":"SA N°1 : LIEUX GEOMETR IQUES DANS LE PLAN","activite":"Dérivation."},
+  "S5": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Dérivation (suite et fin). Fonctions polynômes."},
+  "S6": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Fonctions rationnelles."},
+  "S7": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Résolution de problèmes conduisant à l'étude d'une fonction polynôme ou d'une fonction rationnelle."},
+  "S8": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Fonction logarithme népérien."},
+  "S9": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Fonction exponentielle népérienne."},
+  "S10": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Fonctions comportant logarithme ou exponentielle."},
+  "S11": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Fonctions comportant logarithme ou exponentielle (suite et fin)."},
+  "S12": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Entiers naturels."},
+  "S13": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Entiers naturels (suite et fin)."},
+  "S14": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Équations-Inéquations-Système."},
+  "S15": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Équations-Inéquations-Système (suite et fin)."},
+  "S16": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Suites numériques."},
+  "S17": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Suites numériques (suite)."},
+  "S18": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Suites numériques (suite et fin). Statistique."},
+  "S19a": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Statistique (suite et fin)."},
+  "S19b": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Statistique (suite et fin)."},
+  "S20": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Probabilité."},
+  "S21": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Probabilité (suite)."},
+  "S22": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Probabilité (suite et fin)."}
+};

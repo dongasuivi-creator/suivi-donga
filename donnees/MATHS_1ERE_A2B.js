@@ -1,0 +1,26 @@
+/* Mathématiques – Première A2 et B : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["1ERE_A2B"] = {
+  "S1": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Équations du second degré à une inconnue dans IR."},
+  "S2": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Somme et produit des racines d'un polynôme du second degré. Équation bicarrée."},
+  "S3": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Inéquations du second degré dans IR. Inéquation bicarrée."},
+  "S4": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Système d'équations linéaires dans IR²."},
+  "S5": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Système d'inéquations linéaires dans IR²."},
+  "S6": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Suites arithmétiques."},
+  "S7": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Suites géométriques."},
+  "S8": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Statistique."},
+  "S9": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Statistique (suite et fin)."},
+  "S10": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Dénombrement."},
+  "S11": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Dénombrement (suite et fin)."},
+  "S12": {"sa":"SA N°2 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Fonctions numériques d'une variable réelle."},
+  "S13": {"sa":"SA N°2 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Fonctions numériques d'une variable réelle (suite et fin). Limite finie d'une fonction en un point - continuité."},
+  "S14": {"sa":"SA N°2 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Limite finie d'une fonction en un point – continuité."},
+  "S15": {"sa":"SA N°2 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Dérivation."},
+  "S16": {"sa":"SA N°2 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Dérivation (suite)."},
+  "S17": {"sa":"SA N°2 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Dérivation (suite et fin)."},
+  "S18": {"sa":"SA N°2 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Étude des fonctions x -> 1/x ; x -> x² et x -> racine de x."},
+  "S19a": {"sa":"SA N°2 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Étude des fonctions x -> xⁿ et x -> x², où n dans IR*."},
+  "S19b": {"sa":"SA N°2 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Étude des fonctions x -> xⁿ et x -> x², où n dans IR* (suite et fin)."},
+  "S20": {"sa":"SA N°2 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Représentation graphique de la fonction g : x -> f(x - alpha) + beta. Étude de fonctions polynômes."},
+  "S21": {"sa":"SA N°2 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Étude de fonctions polynômes (suite et fin)."},
+  "S22": {"sa":"SA N°2 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Étude de fonctions homographiques."}
+};

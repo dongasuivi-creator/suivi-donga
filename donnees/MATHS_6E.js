@@ -1,0 +1,26 @@
+/* Mathématiques – Sixième : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["6E"] = {
+  "S1": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Cube et pavé droit."},
+  "S2": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Cube et pavé droit (suite et fin). Cône de révolution."},
+  "S3": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Cône de révolution (suite et fin)."},
+  "S4": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Sphère."},
+  "S5": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Droites du plan."},
+  "S6": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Droites du plan (suite et fin). Segments de droites."},
+  "S7": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Segments de droites (suite et fin). Cercles."},
+  "S8": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Cercles (suite et fin). Angles."},
+  "S9": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Angles (suite et fin). Triangles."},
+  "S10": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Triangles (suite et fin)."},
+  "S11": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Parallélogramme."},
+  "S12": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Parallélogramme (suite et fin). Entiers naturels."},
+  "S13": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Entiers naturels (suite et fin). Nombres décimaux arithmétiques."},
+  "S14": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Nombres décimaux arithmétiques (suite et fin). Fractions."},
+  "S15": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Fractions (suite et fin)."},
+  "S16": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Calcul littéral."},
+  "S17": {"sa":"SA N°3 : APPLICATIONS DU PLAN","activite":"Figures symétriques par rapport à une droite."},
+  "S18": {"sa":"SA N°3 : APPLICATIONS DU PLAN","activite":"Figures symétriques par rapport à un point."},
+  "S19a": {"sa":"SA N°3 : APPLICATIONS DU PLAN","activite":"Figures symétriques par rapport à un point (suite et fin)."},
+  "S19b": {"sa":"SA N°3 : APPLICATIONS DU PLAN","activite":"Glissement."},
+  "S20": {"sa":"SA N°4 : ORGANISATION DES DONNEES","activite":"Proportionnalité."},
+  "S21": {"sa":"SA N°4 : ORGANISATION DES DONNEES","activite":"Statistique."},
+  "S22": {"sa":"SA N°4 : ORGANISATION DES DONNEES","activite":"Statistique (suite et fin)."}
+};

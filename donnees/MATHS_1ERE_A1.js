@@ -1,0 +1,26 @@
+/* Mathématiques – Première A1 : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["1ERE_A1"] = {
+  "S1": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Équation du second degré à une inconnue dans IR."},
+  "S2": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Équation du second degré à une inconnue dans IR (suite)."},
+  "S3": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Équation du second degré à une inconnue dans IR (suite et fin). Somme et produit des racines d'un polynôme du second degré."},
+  "S4": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Inéquation du second degré à une inconnue dans IR."},
+  "S5": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Inéquations bicarrées. Systèmes d'équations linéaires à deux inconnues dans IR × IR."},
+  "S6": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Systèmes d'inéquations linéaires à deux inconnues dans IR × IR."},
+  "S7": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Suites arithmétiques."},
+  "S8": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Suites arithmétiques (suite et fin). Suites géométriques."},
+  "S9": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Suites géométriques (suite et fin)."},
+  "S10": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Statistique."},
+  "S11": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Statistique (suite et fin)."},
+  "S12": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Dénombrement."},
+  "S13": {"sa":"SA N°1 : ORGANISATION DES DONNÉES","activite":"Dénombrement (suite et fin). Fonctions numériques d'une variable réelle."},
+  "S14": {"sa":"SA N°2 : LIEUX GÉOMET RIQUES DANS LE PLAN","activite":"Fonctions numériques d'une variable réelle (suite et fin)."},
+  "S15": {"sa":"SA N°2 : LIEUX GÉOMET RIQUES DANS LE PLAN","activite":"Limite et continuité d'une fonction."},
+  "S16": {"sa":"SA N°2 : LIEUX GÉOMET RIQUES DANS LE PLAN","activite":"Limite et continuité d'une fonction (suite et fin)."},
+  "S17": {"sa":"SA N°2 : LIEUX GÉOMET RIQUES DANS LE PLAN","activite":"Dérivation."},
+  "S18": {"sa":"SA N°2 : LIEUX GÉOMET RIQUES DANS LE PLAN","activite":"Dérivation (suite et fin)."},
+  "S19a": {"sa":"SA N°2 : LIEUX GÉOMET RIQUES DANS LE PLAN","activite":"Étude de la fonction x -> 1/x."},
+  "S19b": {"sa":"SA N°2 : LIEUX GÉOMET RIQUES DANS LE PLAN","activite":"Étude de la fonction x -> 1/x (suite et fin)."},
+  "S20": {"sa":"SA N°2 : LIEUX GÉOMET RIQUES DANS LE PLAN","activite":"Étude de la fonction x -> xⁿ, où n dans IR*."},
+  "S21": {"sa":"SA N°2 : LIEUX GÉOMET RIQUES DANS LE PLAN","activite":"Étude de la fonction x -> racine de x."},
+  "S22": {"sa":"SA N°2 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Étude de la fonction x -> racine de x (suite et fin)."}
+};

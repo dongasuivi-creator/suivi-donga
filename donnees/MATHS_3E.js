@@ -1,0 +1,26 @@
+/* Mathématiques – Troisième : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["3E"] = {
+  "S1": {"sa":"SA N°1 : TRIANGLES","activite":"Nombres réels."},
+  "S2": {"sa":"SA N°1 : TRIANGLES","activite":"Nombres réels (suite)."},
+  "S3": {"sa":"SA N°1 : TRIANGLES","activite":"Nombres réels (suite et fin). Valeur absolue."},
+  "S4": {"sa":"SA N°1 : TRIANGLES","activite":"Valeur absolue (suite et fin). Trigonométrie."},
+  "S5": {"sa":"SA N°1 : TRIANGLES","activite":"Trigonométrie (suite et fin). Propriété de Thalès et sa réciproque."},
+  "S6": {"sa":"SA N°1 : TRIANGLES","activite":"Propriété de Thalès et sa réciproque (suite et fin). Triangles semblables."},
+  "S7": {"sa":"SA N°1 : TRIANGLES","activite":"Triangles semblables (suite et fin). Triangle rectangle."},
+  "S8": {"sa":"SA N°1 : TRIANGLES","activite":"Triangle rectangle (suite et fin). Angles et cercles."},
+  "S9": {"sa":"SA N°1 : TRIANGLES","activite":"Angles et cercles (suite et fin)."},
+  "S10": {"sa":"SA N°2 : CONFIGURATIONS DE L'ESPACE","activite":"Cône de révolution."},
+  "S11": {"sa":"SA N°2 : CONFIGURATIONS DE L'ESPACE","activite":"Cône de révolution (suite et fin)."},
+  "S12": {"sa":"SA N°2 : CONFIGURATIONS DE L'ESPACE","activite":"Sections planes."},
+  "S13": {"sa":"SA N°3 : CALCUL LITTÉRAL","activite":"Polynômes."},
+  "S14": {"sa":"SA N°3 : CALCUL LITTÉRAL","activite":"Équations de droite."},
+  "S15": {"sa":"SA N°3 : CALCUL LITTÉRAL","activite":"Équations de droite (suite)."},
+  "S16": {"sa":"SA N°3 : CALCUL LITTÉRAL","activite":"Équations de droite (suite et fin). Équations et inéquations."},
+  "S17": {"sa":"SA N°3 : CALCUL LITTÉRAL","activite":"Équations et inéquations (suite et fin)."},
+  "S18": {"sa":"SA N°3 : CALCUL LITTÉRAL","activite":"Somme de deux vecteurs – Produit d'un vecteur par un nombre réel."},
+  "S19a": {"sa":"SA N°3 : CALCUL LITTÉRAL","activite":"Somme de deux vecteurs – Produit d'un vecteur par un nombre réel (suite et fin)."},
+  "S19b": {"sa":"SA N°3 : CALCUL LITTÉRAL","activite":"Calcul sur les coordonnées de vecteurs."},
+  "S20": {"sa":"SA N°3 : CALCUL LITTÉRAL","activite":"Calcul sur les coordonnées de vecteurs (suite et fin)."},
+  "S21": {"sa":"SA N°4 : ORGANISATION DES DONNÉES","activite":"Applications affines. Applications linéaires."},
+  "S22": {"sa":"SA N°4 : ORGANISATION DES DONNÉES","activite":"Statistiques."}
+};

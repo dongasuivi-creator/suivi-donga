@@ -1,0 +1,26 @@
+/* Mathématiques – Terminale D : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["TLE_D"] = {
+  "S1": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Vecteurs de l'espace. Barycentre de n points pondérés, (n dans IN, n >= 2)."},
+  "S2": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Représentations paramétriques d'une droite, d'un plan dans l'espace. Équation cartésienne d'un plan. Système d'équations cartésiennes d'une droite de l'espace."},
+  "S3": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Système d'équations linéaires. Produit scalaire. Produit vectoriel."},
+  "S4": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Produit vectoriel (suite et fin)."},
+  "S5": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Nombres complexes."},
+  "S6": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Nombres complexes (suite et fin)."},
+  "S7": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Limites et continuité."},
+  "S8": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Limites et continuité (suite et fin)."},
+  "S9": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Dérivation - Étude de fonctions."},
+  "S10": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Dérivation - Étude de fonctions (suite)."},
+  "S11": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Dérivation - Étude de fonctions (suite et fin). Complément sur les Primitives."},
+  "S12": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Fonction logarithme népérien."},
+  "S13": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Fonction exponentielle népérienne (suite et fin). Fonctions exponentielles - Fonctions puissances."},
+  "S14": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Calcul intégral."},
+  "S15": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Calcul intégral (suite)."},
+  "S16": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Calcul intégral (suite et fin)."},
+  "S17": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Équations différentielles linéaires à coefficients constants."},
+  "S18": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Probabilité."},
+  "S19a": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Probabilité (suite et fin)."},
+  "S19b": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Probabilité (suite et fin)."},
+  "S20": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Suites numériques."},
+  "S21": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Statistique."},
+  "S22": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Application des nombres complexes aux transformations du plan."}
+};

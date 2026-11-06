@@ -1,0 +1,26 @@
+/* Mathématiques – Première C : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["1ERE_C"] = {
+  "S1": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Droites orthogonales. Droites et plans orthogonaux. Plans perpendiculaires."},
+  "S2": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Projection orthogonale sur un plan. Projection orthogonale sur une droite. Vecteurs de l'espace."},
+  "S3": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Vecteurs de l'espace (suite et fin)."},
+  "S4": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Produit scalaire. Géométrie analytique de l'espace : droites et plans."},
+  "S5": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Géométrie analytique de l'espace : droites et plans (suite et fin)."},
+  "S6": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Équations et inéquations dans IR."},
+  "S7": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Équations et inéquations dans IR (suite)."},
+  "S8": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Équations et inéquations dans IR (suite et fin). Statistique."},
+  "S9": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Dénombrement."},
+  "S10": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Fonctions et applications."},
+  "S11": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Fonctions et applications (suite et fin). Limite et continuité."},
+  "S12": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Limite et continuité (suite et fin). Extension de la notion de limite."},
+  "S13": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Dérivation."},
+  "S14": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Dérivation (suite et fin). Primitives. Suites numériques."},
+  "S15": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Suites numériques (suite et fin)."},
+  "S16": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Angles orientés et leurs propriétés. Angles associés."},
+  "S17": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Formules d'addition et de transformation. Fonctions circulaires. Équations et inéquations trigonométriques."},
+  "S18": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Barycentre de deux, trois ou quatre points pondérés."},
+  "S19a": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Orthogonalité, droite et cercle dans le plan."},
+  "S19b": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Orthogonalité, droite et cercle dans le plan (suite et fin)."},
+  "S20": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Les translations. Les symétries orthogonales et les rotations."},
+  "S21": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Isométries du plan. Similitudes."},
+  "S22": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Similitudes (suite et fin). Représentations graphiques de fonctions et transformations du plan."}
+};

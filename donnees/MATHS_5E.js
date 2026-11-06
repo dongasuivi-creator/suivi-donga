@@ -1,0 +1,26 @@
+/* Mathématiques – Cinquième : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["5E"] = {
+  "S1": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Prisme droit. Division dans IN."},
+  "S2": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Nombres premiers. Puissance. PPCM."},
+  "S3": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"PPCM (suite et fin). PGCD."},
+  "S4": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Distance."},
+  "S5": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Distance (suite et fin). Angles."},
+  "S6": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Angles (suite et fin)."},
+  "S7": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Triangles."},
+  "S8": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Triangles (suite)."},
+  "S9": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Triangles (suite et fin). Cercle."},
+  "S10": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Cercle (suite et fin)."},
+  "S11": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Parallélogramme."},
+  "S12": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Parallélogramme (suite et fin). Polygones particuliers."},
+  "S13": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Polygones particuliers (suite et fin)."},
+  "S14": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Nombres décimaux relatifs."},
+  "S15": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Nombres décimaux relatifs (suite et fin)."},
+  "S16": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Fractions."},
+  "S17": {"sa":"SA N°2 : CONFIGURATIONS DU PLAN","activite":"Puissances."},
+  "S18": {"sa":"SA N°3 : APPLICATIONS DU PLAN","activite":"Figures symétriques par rapport à une droite."},
+  "S19a": {"sa":"SA N°3 : APPLICATIONS DU PLAN","activite":"Figures symétriques par rapport à un point."},
+  "S19b": {"sa":"SA N°3 : APPLICATIONS DU PLAN","activite":"Figures symétriques par rapport à un point (suite et fin)."},
+  "S20": {"sa":"SA N°3 : APPLICATIONS DU PLAN","activite":"Glissement."},
+  "S21": {"sa":"SA N°4 : ORGANISATION DES DONNEES","activite":"Equations."},
+  "S22": {"sa":"SA N°4 : ORGANISATION DES DONNEES","activite":"Proportionnalité."}
+};

@@ -1,0 +1,26 @@
+/* Mathématiques – Seconde A2 et B : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["2NDE_A2B"] = {
+  "S1": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Proportionnalité."},
+  "S2": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Proportionnalité (suite et fin)."},
+  "S3": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Fonction numérique d'une variable réelle : généralités."},
+  "S4": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Fonction numérique d'une variable réelle : généralités (suite et fin)."},
+  "S5": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Notion de suites numériques."},
+  "S6": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Notion de suites numériques (suite et fin)."},
+  "S7": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Dénombrement."},
+  "S8": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Dénombrement (suite)."},
+  "S9": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Dénombrement (suite et fin)."},
+  "S10": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Nombres réels."},
+  "S11": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Nombres réels (suite)."},
+  "S12": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Nombres réels (suite et fin)."},
+  "S13": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Calculs dans IR."},
+  "S14": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Équations du premier degré dans IR."},
+  "S15": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Équations du premier degré dans IR (suite et fin)."},
+  "S16": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Inéquations du premier degré dans IR."},
+  "S17": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Inéquations du premier degré dans IR (suite et fin)."},
+  "S18": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Équations linéaires dans IR×IR."},
+  "S19a": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Système d'équations linéaires dans IR × IR."},
+  "S19b": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Système d'équations linéaires dans IR × IR (suite et fin)."},
+  "S20": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Étude et représentation graphique de fonctions."},
+  "S21": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Étude et représentation graphique de fonctions (suite)."},
+  "S22": {"sa":"SA N°2 : LIEUX GEOMÉTRIQUES DANS LE PLAN","activite":"Étude et représentation graphique de fonctions (suite et fin)."}
+};

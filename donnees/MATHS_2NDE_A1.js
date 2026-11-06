@@ -1,0 +1,26 @@
+/* Mathématiques – Seconde A1 : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["2NDE_A1"] = {
+  "S1": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Proportionnalité."},
+  "S2": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Proportionnalité (suite et fin)."},
+  "S3": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Fonction numérique d'une variable réelle : généralités."},
+  "S4": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Fonction numérique d'une variable réelle."},
+  "S5": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Fonction numérique d'une variable réelle (suite et fin)."},
+  "S6": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Notion de suites numériques."},
+  "S7": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Notion de suites numériques (suite et fin)."},
+  "S8": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Dénombrement."},
+  "S9": {"sa":"SA N°1 : ORGANISATION DES DONNEES","activite":"Dénombrement (suite et fin)."},
+  "S10": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Nombres réels."},
+  "S11": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Nombres réels (suite)."},
+  "S12": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Nombres réels (suite et fin)."},
+  "S13": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Calculs dans IR."},
+  "S14": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Calculs dans IR (suite et fin)."},
+  "S15": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Équations du premier degré dans IR."},
+  "S16": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Inéquations du premier degré dans IR."},
+  "S17": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Inéquations du premier degré dans IR (suite et fin)."},
+  "S18": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Équations du premier degré dans IR × IR."},
+  "S19a": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Système d'équations linéaires dans IR × IR."},
+  "S19b": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Système d'équations linéaires dans IR × IR (suite)."},
+  "S20": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Système d'équations linéaires dans IR × IR (suite et fin)."},
+  "S21": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Étude et représentation graphique de fonctions."},
+  "S22": {"sa":"SA N°2 : LIEUX GEOMET RIQUES","activite":"Étude et représentation graphique de fonctions (suite et fin)."}
+};

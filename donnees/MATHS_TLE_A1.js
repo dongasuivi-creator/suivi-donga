@@ -1,0 +1,26 @@
+/* Mathématiques – Terminale A1 : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["TLE_A1"] = {
+  "S1": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Généralités sur les fonctions."},
+  "S2": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Généralités sur les fonctions (suite et fin)."},
+  "S3": {"sa":"SA N°1 : LIEUX GEOMETRIQUES","activite":"Notion de limite et continuité d'une fonction."},
+  "S4": {"sa":"SA N°1 : LIEUX GEOM ETRIQ UES DANS LE PLAN","activite":"Notion de limite et continuité d'une fonction (suite)."},
+  "S5": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Notion de limite et continuité d'une fonction (suite et fin)."},
+  "S6": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Dérivation."},
+  "S7": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Dérivation (suite et fin)."},
+  "S8": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Fonctions polynômes."},
+  "S9": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Fonctions homographiques."},
+  "S10": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Résolution de problèmes conduisant à l'étude d'une fonction polynôme ou d'une fonction homographique."},
+  "S11": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Résolution de problèmes conduisant à l'étude d'une fonction polynôme ou d'une fonction homographique (suite)."},
+  "S12": {"sa":"SA N°1 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Résolution de problèmes conduisant à l'étude d'une fonction polynôme ou d'une fonction homographique (suite et fin)."},
+  "S13": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Entiers naturels."},
+  "S14": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Entiers naturels (suite et fin)."},
+  "S15": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Équations-Inéquations-Systèmes."},
+  "S16": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Équations-Inéquations-Systèmes (suite)."},
+  "S17": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Équations-Inéquations-Systèmes (suite et fin)."},
+  "S18": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Suites numériques."},
+  "S19a": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Suites numériques (suite)."},
+  "S19b": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Suites numériques (suite et fin)."},
+  "S20": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Probabilité."},
+  "S21": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Probabilité (suite)."},
+  "S22": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Probabilité (suite et fin)."}
+};

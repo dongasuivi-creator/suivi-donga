@@ -1,0 +1,26 @@
+/* Mathématiques – Seconde C : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["2NDE_C"] = {
+  "S1": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Représentation dans le plan d'objets de l'espace. Positions relatives d'une droite et d'un plan de l'espace. Positions relatives de deux plans de l'espace."},
+  "S2": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Positions relatives de deux droites de l'espace. Étude du parallélisme de droites et plans de l'espace."},
+  "S3": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Étude du parallélisme de droites et plans de l'espace (suite et fin). La sphère."},
+  "S4": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Calculs dans IR."},
+  "S5": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Calculs dans IR (suite et fin). Généralités sur les fonctions."},
+  "S6": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Applications. Études de quelques fonctions."},
+  "S7": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Étude de quelques fonctions (suite et fin). Équations et inéquations dans IR."},
+  "S8": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Équations et inéquations dans IR (suite et fin). Statistique."},
+  "S9": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Statistique (suite et fin). Polynômes et fractions rationnelles."},
+  "S10": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Polynômes et fractions rationnelles (suite et fin)."},
+  "S11": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Vecteurs du plan."},
+  "S12": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Vecteurs du plan (suite et fin). Droites dans le plan."},
+  "S13": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Droites dans le plan (suite et fin)."},
+  "S14": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Homothétie."},
+  "S15": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Symétrie orthogonale – symétrie centrale – translation."},
+  "S16": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Symétrie orthogonale – symétrie centrale – translation (suite et fin). Angles inscrits et lieux géométriques."},
+  "S17": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Angles inscrits et lieux géométriques (suite et fin). Angles orientés – Trigonométrie."},
+  "S18": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Angles orientés – Trigonométrie (suite et fin)."},
+  "S19a": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Produit scalaire dans le plan."},
+  "S19b": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Produit scalaire dans le plan (suite et fin)."},
+  "S20": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Rotation."},
+  "S21": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Cercles dans le plan. Équations et inéquations dans IR× IR."},
+  "S22": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Équations et inéquations dans IR× IR (suite et fin)."}
+};

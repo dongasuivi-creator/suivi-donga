@@ -1,0 +1,26 @@
+/* Mathématiques – Terminale C : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["TLE_C"] = {
+  "S1": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Calcul vectoriel."},
+  "S2": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Calcul vectoriel (suite et fin)."},
+  "S3": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Applications de l'espace."},
+  "S4": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Applications de l'espace (suite et fin)."},
+  "S5": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Système d'équations linéaires. Arithmétique."},
+  "S6": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Arithmétique (suite)."},
+  "S7": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Arithmétique (suite)."},
+  "S8": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Arithmétique (suite et fin). Nombres complexes."},
+  "S9": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Nombres complexes (suite)."},
+  "S10": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Nombres complexes (suite et fin)."},
+  "S11": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Limites et continuité."},
+  "S12": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Limites et continuité (suite et fin). Dérivation - Études de fonctions."},
+  "S13": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Dérivation - Études de fonctions (suite et fin). Complément sur les primitives."},
+  "S14": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Fonction logarithme népérien."},
+  "S15": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Fonction exponentielle népérienne."},
+  "S16": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Fonctions exponentielles. Fonctions puissances."},
+  "S17": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Calcul intégral."},
+  "S18": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Équations différentielles linéaires à coefficients constants. Probabilité."},
+  "S19a": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Probabilité (suite et fin). Suites numériques."},
+  "S19b": {"sa":"SA N°2 : ORGANISATION DES DONNÉES","activite":"Suites numériques (suite et fin)."},
+  "S20": {"sa":"SA N°3 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Isométries du plan. Applications affines. Similitudes."},
+  "S21": {"sa":"SA N°3 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Coniques."},
+  "S22": {"sa":"SA N°3 : LIEUX GÉOMÉT RIQUES DANS LE PLAN","activite":"Coniques (suite et fin)."}
+};

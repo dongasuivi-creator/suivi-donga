@@ -1,0 +1,26 @@
+/* Mathématiques – Première D : progression par semaine (une ligne par semaine). */
+REF_MAT.MATHS.data.progressions["1ERE_D"] = {
+  "S1": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Droites orthogonales. Droites et plans orthogonaux."},
+  "S2": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Plans perpendiculaires. Projection orthogonale sur un plan. Projection orthogonale sur une droite."},
+  "S3": {"sa":"SA N°1 : CONFIGURATIONS DE L'ESPACE","activite":"Vecteurs de l'espace."},
+  "S4": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Équations et inéquations dans IR."},
+  "S5": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Équations et inéquations dans IR (suite et fin). Systèmes linéaires."},
+  "S6": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Statistique."},
+  "S7": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Dénombrement."},
+  "S8": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Dénombrement (suite et fin)."},
+  "S9": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Fonctions numériques d'une variable réelle."},
+  "S10": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Limites et continuité."},
+  "S11": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Extension de la notion de limite."},
+  "S12": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Dérivation."},
+  "S13": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Dérivation (suite et fin). Primitives."},
+  "S14": {"sa":"SA N°2 : ORGANISATION DES DONNEES","activite":"Suites numériques."},
+  "S15": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Angles orientés et leurs propriétés. Angles associés."},
+  "S16": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Formules d'addition et de transformation."},
+  "S17": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Équations et inéquations trigonométriques."},
+  "S18": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Barycentre de deux, trois ou quatre points pondérés."},
+  "S19a": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Transformations du plan et isométries."},
+  "S19b": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Transformations du plan et isométries (suite et fin)."},
+  "S20": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Représentation graphique de fonctions et transformations du plan."},
+  "S21": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Représentation graphique de fonctions et transformations du plan (suite et fin). Étude de fonctions numériques de variable réelle."},
+  "S22": {"sa":"SA N°3 : LIEUX GEOMET RIQUES DANS LE PLAN","activite":"Étude de fonctions numériques de variable réelle (suite et fin)."}
+};
