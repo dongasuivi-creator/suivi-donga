@@ -33,8 +33,9 @@ async function dirPoints(){
     res.innerHTML="<p>Chargement…</p>";
     try{
       const rows=await rest(`points_valides?select=*&semaine=eq.${s}&order=matiere,etablissement,classe_formulaire`);
-      let etabs=[];try{etabs=(await rest("etablissements?select=nom&order=nom")).map(x=>x.nom)}catch(e){}
-      if(!rows.length){res.innerHTML='<p class="mut">Aucun point validé pour cette semaine.</p>';return}
+      let etabsF=[];try{etabsF=await rest("etablissements?select=nom,commune&order=nom")}catch(e){try{etabsF=(await rest("etablissements?select=nom&order=nom"))}catch(e2){}}
+      const etabs=etabsF.map(x=>x.nom);
+      if(!rows.length){res.innerHTML='<p class="mut">Aucun point validé pour cette semaine.</p>'+blocSansPoint();brancherSansPoint(s,rows,etabsF);return}
       const dEnc=aujourdhui();
       res.innerHTML=`<p><b>${rows.length}</b> point(s) validé(s) · ${new Set(rows.map(r=>r.etablissement)).size} collège(s)</p>
       <div class="row"><div><label>Date du point</label><input id="dt" type="date" value="${dEnc}"></div><div><label>Établi par (facultatif)</label><input id="eb" placeholder="Nom du responsable"></div></div>
@@ -42,6 +43,7 @@ async function dirPoints(){
       <h3 style="margin-top:14px">Tableau du ministère</h3><div class="scroll" id="tm"></div><p class="mut">Faites glisser le tableau pour voir toutes les colonnes.</p>
       <div id="mq"></div>
       ${blocEtabs()}
+      ${blocSansPoint()}
       <h3 style="margin-top:14px">Détail</h3><div class="scroll"><table><tr><th>Collège</th><th>Disc.</th><th>Enseignant</th><th>Classe</th><th>Prévu</th><th>Réalisé</th><th>État</th><th>Motif</th></tr>
       ${rows.map(r=>`<tr><td>${esc(r.etablissement)}</td><td>${esc(r.matiere)}</td><td>${esc(r.enseignant)}</td><td>${esc(r.classe_formulaire)} ${esc(r.division)}</td><td>${r.taux_prevu}</td><td>${r.taux_realise}</td><td>${esc(ETAT[r.etat]||"")}</td><td>${esc(r.motif)}</td></tr>`).join("")}</table></div>`;
       const calc=()=>{
@@ -52,7 +54,7 @@ async function dirPoints(){
         $("#mq").innerHTML=S.manquants.length?`<p class="mut"><b>Collèges sans point validé :</b> ${S.manquants.map(esc).join(", ")}</p>`:"";
         return S;
       };
-      calc();brancherEtabs(rows,s,true);
+      calc();brancherEtabs(rows,s,true);brancherSansPoint(s,rows,etabsF);
       $("#dt").onchange=calc;$("#eb").oninput=calc;
       $("#bx").onclick=()=>dirExcel(calc());
       $("#bp").onclick=()=>dirPDF(calc());

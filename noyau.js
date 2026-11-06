@@ -211,7 +211,7 @@ function formDefaut(code){
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="14";
+const VERSION_SITE="15";
 const REF_MAT = {};
 function chargerScript(url){
   return new Promise(res=>{
@@ -526,4 +526,50 @@ function brancherEtabs(rows,s,toutes){
   $("#te").innerHTML=etabsHTML(T);
   $("#tx").onclick=()=>etabsExcel(tableauEtabs(rows,s,toutes));
   $("#tp").onclick=()=>etabsPDF(tableauEtabs(rows,s,toutes));
+}
+
+/* ===== Collèges sans point validé (v15) ===== */
+function donneesSansPoint(sem,rows,etabs){
+  const fait={};rows.forEach(r=>{fait[slug(r.etablissement)]=1});
+  const manq=etabs.filter(e=>!fait[slug(e.nom)]).sort((a,b)=>a.nom.localeCompare(b.nom,"fr"));
+  const total=etabs.length,ok=total-manq.length,taux=total?Math.round(1000*ok/total)/10:0;
+  const cm={};etabs.forEach(e=>{const c=e.commune||"Non précisée";const g=cm[c]=cm[c]||{c,t:0,m:0};g.t++;if(!fait[slug(e.nom)])g.m++});
+  const communes=Object.values(cm).sort((a,b)=>a.c.localeCompare(b.c,"fr"));
+  const n=new Date(),p2=x=>String(x).padStart(2,"0");
+  const stamp=p2(n.getDate())+"/"+p2(n.getMonth()+1)+"/"+String(n.getFullYear()).slice(2)+" à "+p2(n.getHours())+"h"+p2(n.getMinutes())+"min";
+  return {sem,manq,total,ok,taux,communes,aCommune:communes.some(c=>c.c!=="Non précisée"),periode:periodeSemaine(sem),stamp};
+}
+function sansPointExcel(D){
+  const H=v=>({v,s:3}),C=v=>({v,s:2}),B=v=>({v,s:4});
+  const rows=[[{v:"Semaine N°"+D.sem,s:1}],[{v:"COLLÈGES SANS POINT VALIDÉ",s:1}],[D.periode],[{v:"(point établi le "+D.stamp+")"}],[],
+   {v:[H("Statistiques"),H("Valeur")],h:22},
+   [B("Collèges inscrits"),C(D.total)],[B("Collèges avec au moins un point validé"),C(D.ok)],[B("Collèges sans point validé"),C(D.manq.length)],[B("Taux de collèges ayant renseigné"),C(D.taux+" %")],[]];
+  if(D.aCommune){rows.push({v:[H("Commune"),H("Collèges inscrits"),H("Sans point validé"),H("Taux renseigné")],h:22});
+    D.communes.forEach(c=>rows.push([B(c.c),C(c.t),C(c.m),C(c.t?Math.round(1000*(c.t-c.m)/c.t)/10+" %":"")]));rows.push([])}
+  rows.push({v:[H("N°"),H("Collège"),H("Commune")],h:22});
+  const com={};
+  D.manq.forEach((e,i)=>rows.push([C(i+1),B(e.nom),C(e.commune||"")]));
+  telechargerBlob(classeurXLSX([{nom:"Collèges sans point",rows,larg:[40,40,24,20]}]),"Colleges-sans-point-valide-S"+D.sem+".xlsx");
+}
+function sansPointPDF(D){
+  const t=(h,b)=>'<table class="te"><thead><tr>'+h.map(x=>'<th>'+esc(x)+'</th>').join("")+'</tr></thead><tbody>'+b.map(r=>'<tr>'+r.map(x=>'<td>'+esc(x)+'</td>').join("")+'</tr>').join("")+'</tbody></table>';
+  let h='<div style="text-align:center;margin-bottom:10px"><div style="font-size:20px;font-weight:700">Semaine N°'+D.sem+'</div><div style="font-size:12px;font-weight:700">COLLÈGES SANS POINT VALIDÉ</div><div style="font-size:11px;font-weight:700">'+esc(D.periode)+'</div><div style="font-size:11px;font-weight:700">(point établi le '+esc(D.stamp)+')</div></div>';
+  h+=t(["Statistiques","Valeur"],[["Collèges inscrits",D.total],["Collèges avec au moins un point validé",D.ok],["Collèges sans point validé",D.manq.length],["Taux de collèges ayant renseigné",D.taux+" %"]]);
+  if(D.aCommune)h+='<div style="height:10px"></div>'+t(["Commune","Collèges inscrits","Sans point validé","Taux renseigné"],D.communes.map(c=>[c.c,c.t,c.m,c.t?Math.round(1000*(c.t-c.m)/c.t)/10+" %":""]));
+  h+='<div style="height:10px"></div>'+(D.manq.length?t(["N°","Collège","Commune"],D.manq.map((e,i)=>[i+1,e.nom,e.commune||""])):'<p>Tous les collèges inscrits ont au moins un point validé.</p>');
+  $("#rapport").innerHTML=h;
+  const st=document.createElement("style");st.id="pg-port";st.textContent="@page{size:A4 portrait;margin:10mm}";document.head.appendChild(st);
+  const ancien=document.title;document.title="Colleges-sans-point-valide-S"+D.sem;
+  document.body.classList.add("mode-rapport");
+  const fin=()=>{document.body.classList.remove("mode-rapport");document.title=ancien;const s=document.getElementById("pg-port");if(s)s.remove();window.removeEventListener("afterprint",fin)};
+  window.addEventListener("afterprint",fin);
+  setTimeout(()=>window.print(),50);
+}
+function blocSansPoint(){
+  return '<h3 style="margin-top:14px">Collèges sans point validé</h3><div id="sp"></div><button class="ok" id="spx">Télécharger en Excel</button><button class="ko" id="spp">Télécharger en PDF</button>';
+}
+function brancherSansPoint(sem,rows,etabs){
+  const D=donneesSansPoint(sem,rows,etabs);
+  $("#sp").innerHTML='<p><b>'+D.manq.length+'</b> collège(s) sans point validé sur <b>'+D.total+'</b> inscrit(s) · taux renseigné <b>'+D.taux+' %</b></p>'+(D.manq.length?'<p class="mut">'+D.manq.map(e=>esc(e.nom)).join(", ")+'</p>':"");
+  $("#spx").onclick=()=>sansPointExcel(D);$("#spp").onclick=()=>sansPointPDF(D);
 }
