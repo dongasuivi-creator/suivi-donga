@@ -211,15 +211,27 @@ function formDefaut(code){
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="12";
+const VERSION_SITE="13";
 const REF_MAT = {};
-function chargerMat(code){
-  if(REF_MAT[code])return Promise.resolve(true);
+function chargerScript(url){
   return new Promise(res=>{
     const s=document.createElement("script");
-    s.src="donnees/"+code+".js?v="+VERSION_SITE;
-    s.onload=()=>res(!!REF_MAT[code]);s.onerror=()=>res(false);
+    s.src=url+"?v="+VERSION_SITE;
+    s.onload=()=>res(true);s.onerror=()=>res(false);
     document.head.appendChild(s);
+  });
+}
+/* Une discipline = donnees/CODE.js. Si ce fichier déclare "parts" (ex. Mathématiques : une progression par classe),
+   chaque partie est chargée depuis donnees/CODE_PARTIE.js. */
+function chargerMat(code){
+  if(REF_MAT[code]&&REF_MAT[code].chargee)return Promise.resolve(true);
+  return chargerScript("donnees/"+code+".js").then(async ok=>{
+    if(!ok||!REF_MAT[code])return false;
+    const parts=REF_MAT[code].parts||[];
+    const r=await Promise.all(parts.map(p=>chargerScript("donnees/"+code+"_"+p+".js")));
+    REF_MAT[code].partsOk=r.every(x=>x);
+    REF_MAT[code].chargee=true;
+    return true;
   });
 }
 
