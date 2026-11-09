@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Suivi Hebdo Progression – Donga</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#1f3b5c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Suivi Donga">
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--tx:#1f2933;--mut:#6b7280;--br:#dde1e7;--p:#274c77;--ok:#3d6b55;--ko:#9b4a4a;--warn:#8f6a2e;--v:#4f5683;--sec:#e8ebf0}
 *{box-sizing:border-box}
@@ -65,17 +71,18 @@ footer{text-align:center;color:var(--mut);font-size:13px;padding:20px}
 </style>
 </head>
 <body>
-<header><h1>Suivi Hebdo Progression – Donga</h1><small>Données fictives pendant la phase de test</small></header>
+<header style="display:flex;gap:12px;align-items:center"><img src="icon-192.png" alt="" width="46" height="46" style="border-radius:10px"><div><h1>Suivi Hebdo Progression – Donga</h1><small>Données fictives pendant la phase de test</small></div></header>
 <main id="app"></main>
 <div id="rapport" class="rap"></div>
-<footer>Conçu par Francis EGOUNLETI · Remarques : WhatsApp 01 97 89 09 52<br><span style="font-size:12px">Version 18 · 9 novembre 2026</span></footer>
+<footer>Conçu par Francis EGOUNLETI · Remarques : WhatsApp 01 97 89 09 52<br><span style="font-size:12px">Version 19 · 9 novembre 2026</span></footer>
 
-<script src="noyau.js?v=18"></script>
-<script src="enseignant.js?v=18"></script>
-<script src="ae.js?v=18"></script>
-<script src="censeur.js?v=18"></script>
-<script src="direction.js?v=18"></script>
-<script src="encadreur.js?v=18"></script>
+<script src="noyau.js?v=19"></script>
+<script src="enseignant.js?v=19"></script>
+<script src="ae.js?v=19"></script>
+<script src="censeur.js?v=19"></script>
+<script src="direction.js?v=19"></script>
+<script src="encadreur.js?v=19"></script>
+<script src="installer.js?v=19"></script>
 <script>accueil();</script>
 </body>
 </html>
