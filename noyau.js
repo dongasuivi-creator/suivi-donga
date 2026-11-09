@@ -212,7 +212,7 @@ function formDefaut(code){
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="26";
+const VERSION_SITE="27";
 const REF_MAT = {};
 function chargerScript(url){
   return new Promise(res=>{
@@ -446,7 +446,7 @@ function accueil(){
 function connexionRole(role){
   const DEMARRER={ae:aeDemarrer,dir:dirDemarrer,enc:encDemarrer};
   if(sess&&sess.access_token){return DEMARRER[role]()}
-  app.innerHTML=`<div class="card">${entete(role==="ae"?"Connexion AE":role==="enc"?"Connexion CP / Inspecteur":"Connexion Direction",true)}
+  app.innerHTML=`<div class="card">${entete(role==="ae"?"Connexion AE, Censeur ou Directeur":role==="enc"?"Connexion CCIP, CP ou Inspecteur":"Connexion Direction",true)}
   <label>Votre adresse e-mail</label><input id="em" type="email" autocomplete="email" inputmode="email" placeholder="exemple@gmail.com">
   <button id="go">Recevoir mon code</button><div id="m"></div>
   <div id="bloc2" style="display:none"><label>Code à 6 chiffres reçu par e-mail</label>
