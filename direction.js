@@ -173,7 +173,7 @@ async function dirAdm(){
 
 
 /* Encadreurs : Conseillers Pédagogiques (par commune et discipline), Inspecteurs (par discipline), IPD (toutes disciplines) */
-const ROLE_ENC={CP:"Conseiller pédagogique",INSPECTEUR:"Inspecteur",IPD:"Inspecteur Pédagogique Départemental"};
+const ROLE_ENC={CP:"Conseiller pédagogique",INSPECTEUR:"Inspecteur",IPD:"CCIP · Inspecteur Pédagogique Départemental"};
 function libPortee(x){
   if(x.role==="IPD")return "toutes les disciplines, toute la Donga";
   return (NOM_MAT[x.matiere]||x.matiere)+(x.commune?" – commune de "+x.commune:" – toute la Donga");
@@ -184,7 +184,7 @@ async function dirEnc(){
     let a=await rpc("lister_encadreurs",{});
     z.innerHTML=`<div class="card"><h3>Ajouter des encadreurs</h3>
     <p class="mut">Ils consultent en lecture seule les points validés et les communiqués de leur périmètre. Ils se connectent avec leur adresse e-mail (code à 6 chiffres) par le bouton « Conseiller pédagogique, Inspecteur ». Une ligne par personne : <b>e-mail ; nom ; rôle ; discipline ; commune</b>.</p>
-    <ul class="mut"><li><b>CP</b> : discipline et commune obligatoires (Djougou, Bassila, Copargo, Ouaké).</li><li><b>Inspecteur</b> : discipline obligatoire, toute la Donga.</li><li><b>IPD</b> (Inspecteur Pédagogique Départemental) : ni discipline ni commune, il voit tout.</li></ul>
+    <ul class="mut"><li><b>CP</b> : discipline et commune obligatoires (Djougou, Bassila, Copargo, Ouaké).</li><li><b>Inspecteur</b> : discipline obligatoire, toute la Donga.</li><li><b>IPD</b> = membre du CCIP (Inspecteur Pédagogique Départemental) : ni discipline ni commune, il voit tout.</li></ul>
     <textarea id="t" rows="5" placeholder="cp1@gmail.com ; KOFFI Jean ; CP ; Mathématiques ; Djougou&#10;insp1@gmail.com ; ADJO Marie ; Inspecteur ; PCT&#10;ipd@gmail.com ; TOKO Paul ; IPD"></textarea>
     <label>Ou choisir un fichier (.csv, .txt)</label><input type="file" id="fi" accept=".csv,.txt,text/csv,text/plain">
     <button id="ad">Enregistrer</button><div id="m"></div></div>

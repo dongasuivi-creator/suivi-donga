@@ -21,6 +21,7 @@ function encEcran(){
 }
 function encOnglet(){
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===ENC.tab));
+  if(ENC.tab==="com"&&ENC.p.role==="IPD")return dirCom({ipd:true});
   ({points:encPoints,com:encCom})[ENC.tab]();
 }
 async function encCom(){

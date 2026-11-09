@@ -211,7 +211,7 @@ function formDefaut(code){
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="16";
+const VERSION_SITE="18";
 const REF_MAT = {};
 function chargerScript(url){
   return new Promise(res=>{
@@ -373,20 +373,21 @@ async function aeCom(){
     brancherCom(z,l);brancherChaine(z);
   }catch(e){z.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
 }
-async function dirCom(){
+async function dirCom(opt){
+  opt=opt||{};const IPD=!!opt.ipd;
   const z=$("#zone");z.innerHTML='<div class="card">Chargement…</div>';
   try{
     const [l,ch]=await Promise.all([rest("communiques?select=*&order=cree_le.desc&limit=50"),lireChaine()]);
-    z.innerHTML=`<div class="card"><h3>Chaîne WhatsApp de la Direction</h3>
+    z.innerHTML=`${IPD?"":`<div class="card"><h3>Chaîne WhatsApp de la Direction</h3>
     <p class="mut">Collez le lien de votre chaîne (https://whatsapp.com/channel/…). Il sera proposé à tous les enseignants et AE.</p>
-    <input id="lc" value="${esc(ch)}" placeholder="https://whatsapp.com/channel/..."><button id="sc">Enregistrer le lien</button><div id="mc"></div></div>
+    <input id="lc" value="${esc(ch)}" placeholder="https://whatsapp.com/channel/..."><button id="sc">Enregistrer le lien</button><div id="mc"></div></div>`}
     <div class="card"><h3>Nouveau communiqué</h3>
     <label>Titre</label><input id="ct" maxlength="120">
     <label>Message (facultatif si vous joignez un PDF)</label><textarea id="cx" rows="5" maxlength="2000"></textarea>
     <label>Document PDF (facultatif, 3 Mo maximum)</label><input type="file" id="cf" accept="application/pdf,.pdf">
     <label>Destinataires</label><select id="cc"><option value="TOUS">Tous les enseignants</option>${MATIERES.map(m=>`<option value="${m}">${esc(NOM_MAT[m]||m)}</option>`).join("")}</select>
     <button class="ok" id="cp">Publier</button><div id="m"></div></div>
-    ${l.map(c=>carteCom(c)+boutonsCom(c)+`<button class="ok sm" data-pub="${c.id}">Copier et ouvrir la chaîne</button><button class="ko sm" data-del="${c.id}">Supprimer</button></div>`).join("")||'<div class="card"><p class="mut">Aucun communiqué publié.</p></div>'}`;
+    ${l.map(c=>carteCom(c)+boutonsCom(c)+(IPD?"":`<button class="ok sm" data-pub="${c.id}">Copier et ouvrir la chaîne</button>`)+((!IPD||String(c.auteur||"").toLowerCase()===String(sess.email||"").toLowerCase())?`<button class="ko sm" data-del="${c.id}">Supprimer</button>`:"")+"</div>").join("")||'<div class="card"><p class="mut">Aucun communiqué publié.</p></div>'}`;
     $("#cp").onclick=async()=>{
       const t=$("#ct").value.trim(),x=$("#cx").value.trim(),f=$("#cf").files[0];
       if(t.length<3)return note($("#m"),"Le titre est obligatoire");
@@ -400,10 +401,10 @@ async function dirCom(){
           const r=await rpc("publier_communique_pdf",{p_titre:t,p_texte:x,p_cible:$("#cc").value,p_nom:f.name,p_contenu:await fichierBase64(f)});
           if(!r.ok){$("#cp").disabled=false;return note($("#m"),r.message)}
         }else await rest("communiques",{method:"POST",headers:{Prefer:"return=minimal"},body:{titre:t,texte:x,cible:$("#cc").value,auteur:sess.email}});
-        dirCom();
+        dirCom(opt);
       }catch(e){$("#cp").disabled=false;note($("#m"),e.message)}
     };
-    $("#sc").onclick=async()=>{
+    if($("#sc"))$("#sc").onclick=async()=>{
       const u=$("#lc").value.trim();
       if(u&&!chaineValide(u))return note($("#mc"),"Lien invalide : il doit commencer par https://whatsapp.com/channel/");
       try{
@@ -415,13 +416,13 @@ async function dirCom(){
     z.querySelectorAll("[data-pub]").forEach(b=>b.onclick=async()=>{
       const c=l.find(x=>x.id===b.dataset.pub);if(!c)return;
       try{await navigator.clipboard.writeText(texteCom(c))}catch(e){}
-      const u=$("#lc").value.trim();
+      const u=($("#lc")||{value:""}).value.trim();
       if(chaineValide(u)){window.open(u,"_blank","noopener");b.textContent="Texte copié : collez-le dans la chaîne"}
       else note($("#mc"),"Enregistrez d'abord le lien de la chaîne");
     });
     z.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{
       if(!confirm("Supprimer ce communiqué ?"))return;
-      try{await rest("communiques?id=eq."+b.dataset.del,{method:"DELETE",headers:{Prefer:"return=minimal"}});dirCom()}catch(e){note($("#m"),e.message)}
+      try{await rest("communiques?id=eq."+b.dataset.del,{method:"DELETE",headers:{Prefer:"return=minimal"}});dirCom(opt)}catch(e){note($("#m"),e.message)}
     });
     brancherCom(z,l);
   }catch(e){z.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
@@ -435,7 +436,7 @@ function accueil(){
   <button class="big b1" id="a-ens">👩‍🏫 Je suis enseignant<br><small>Envoyer mon point de la semaine</small></button>
   <button class="big b2" id="a-ae">✅ AE ou censeur<br><small>Valider les points, gérer les AE de mon collège</small></button>
   <button class="big b3" id="a-dir">🏛️ Direction Départementale<br><small>Tableaux de synthèse</small></button>
-  <button class="big b4" id="a-enc">🎓 Conseiller pédagogique, Inspecteur<br><small>Consulter les points de ma discipline</small></button>
+  <button class="big b4" id="a-enc">🎓 CCIP, Conseiller pédagogique, Inspecteur<br><small>Consulter les points, publier (CCIP)</small></button>
   </div>`;
   $("#a-ens").onclick=ensConnexion;$("#a-ae").onclick=()=>connexionRole("ae");$("#a-dir").onclick=()=>connexionRole("dir");$("#a-enc").onclick=()=>connexionRole("enc");
 }
