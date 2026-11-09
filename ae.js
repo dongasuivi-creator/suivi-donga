@@ -53,10 +53,13 @@ async function aeValider(){
     const att=rows.filter(r=>r.statut==="en_attente");
     z.innerHTML=`<div class="card"><h3>Semaine ${s}</h3>
       <p class="mut">${att.length} à valider · ${rows.filter(r=>r.statut==="valide").length} validé(s) · ${sans.length} enseignant(s) sans point</p>
-      ${att.length?'<button class="ok" id="tout">Tout valider ('+att.length+')</button>':""}<div id="m"></div></div>
+      ${att.length?'<button class="ok" id="tout">Tout valider ('+att.length+')</button>':""}
+      ${rows.length?'<div class="mut" style="margin-top:8px">Télécharger le point de la semaine :</div><button class="sec sm" id="dlx">Excel</button><button class="sec sm" id="dlp">PDF</button>':""}<div id="m"></div></div>
       ${rows.map(carteSoum).join("")}
       ${sans.length?`<div class="card"><h3>Sans point cette semaine</h3>${sans.map(e=>`<p>${esc(e.nom)} <button class="sec sm" data-saisir="${e.id}">Saisir pour lui</button> <a href="${lienWA(e.whatsapp,"Mr/Mme "+e.nom+", merci d'envoyer votre point de progression de la semaine "+s+" sur la plateforme : "+SITE_URL+"\nPensez à cocher aussi toutes les séquences déjà exécutées, pas seulement celles de cette semaine. Merci.")}" target="_blank" rel="noopener">Relancer</a></p>`).join("")}</div>`:""}`;
     if($("#tout"))$("#tout").onclick=()=>majStatut(att.map(a=>a.id),"valide");
+    if($("#dlx"))$("#dlx").onclick=()=>aePointExcel(rows,sans,s);
+    if($("#dlp"))$("#dlp").onclick=()=>aePointPDF(rows,sans,s);
     z.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>majStatut([b.dataset.v],"valide"));
     z.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>majStatut([b.dataset.r],"rejete"));
     z.querySelectorAll("[data-e]").forEach(b=>b.onclick=async()=>{
@@ -90,6 +93,39 @@ function carteSoum(r){
   ${r.motif?`<p class="mut">Motif : ${esc(r.motif)}</p>`:""}
   <div id="ed-${r.id}"></div>
   ${r.statut!=="valide"?`<button class="ok sm" data-v="${r.id}">Valider</button>`:""}<button class="sec sm" data-e="${r.id}">Corriger</button>${r.statut!=="rejete"?`<button class="ko sm" data-r="${r.id}">Rejeter</button>`:""}</div>`;
+}
+
+/* ---- Téléchargement du point de la semaine (collège + discipline de l'AE) ---- */
+function aePointDonnees(rows,sans,s){
+  const c=AE.cur,etab=c.etablissements.nom,mat=NOM_MAT[c.matiere]||c.matiere;
+  const tri=rows.slice().sort((x,y)=>String((x.enseignants||{}).nom||"").localeCompare(String((y.enseignants||{}).nom||""))||String(x.classe_formulaire).localeCompare(String(y.classe_formulaire)));
+  const L=tri.map(r=>{const en=r.enseignants||{};return [en.nom||"",en.matricule||"",(r.classe_formulaire||"")+" "+(r.division||""),r.taux_prevu,r.taux_realise,r.ecart,ETAT[r.etat]||"",STAT[r.statut]||"",r.motif||""]});
+  const nv=rows.filter(r=>r.statut==="valide").length;
+  return {etab,mat,s,L,sans:sans.map(e=>e.nom),nv,total:rows.length,periode:(typeof periodeSemaine==="function"?periodeSemaine(s):"")};
+}
+const AE_ENT=["Enseignant","Matricule","Classe","Taux prévu (%)","Taux réalisé (%)","Écart (points)","Situation","Statut","Motif"];
+function aePointExcel(rows,sans,s){
+  const D=aePointDonnees(rows,sans,s);
+  const H=v=>({v,s:3}),C=v=>({v,s:2});
+  const t=[{v:[{v:"Point de la semaine "+D.s+" — "+D.etab+" — "+D.mat,s:5}],h:24},[D.periode],[D.nv+" point(s) validé(s) sur "+D.total],[],
+    {v:AE_ENT.map(H),h:32}].concat(D.L.map(l=>({v:l.map(C),h:22})));
+  if(D.sans.length){t.push([]);t.push(["Enseignants sans point cette semaine : "+D.sans.join(", ")])}
+  t.push([]);t.push(["Établi par : "+sess.email]);
+  telechargerBlob(classeurXLSX([{nom:"Point de la semaine",rows:t,larg:[28,12,16,12,12,12,14,12,36],fusions:["A1:I1"]}]),"Point-"+slug(D.etab)+"-"+slug(D.mat)+"-S"+D.s+".xlsx");
+}
+function aePointPDF(rows,sans,s){
+  const D=aePointDonnees(rows,sans,s);
+  let h='<div style="text-align:center;margin-bottom:10px"><div style="font-size:18px;font-weight:700">Point de la semaine '+D.s+'</div><div style="font-weight:700">'+esc(D.etab)+' — '+esc(D.mat)+'</div><div style="font-size:11px">'+esc(D.periode)+' · '+D.nv+' point(s) validé(s) sur '+D.total+'</div></div>';
+  h+='<table class="te" style="font-size:11px"><thead><tr>'+AE_ENT.map(x=>'<th>'+esc(x)+'</th>').join("")+'</tr></thead><tbody>'+D.L.map(l=>'<tr>'+l.map(v=>'<td>'+esc(v)+'</td>').join("")+'</tr>').join("")+'</tbody></table>';
+  if(D.sans.length)h+='<div style="margin-top:8px"><b>Enseignants sans point :</b> '+D.sans.map(esc).join(", ")+'</div>';
+  h+='<div class="sign"><div>Établi par<br>'+esc(sess.email)+'</div><div>Le Chef d\'établissement</div></div>';
+  $("#rapport").innerHTML=h;
+  const st=document.createElement("style");st.id="pg-land";st.textContent="@page{size:A4 "+orientAuto()+";margin:10mm}";document.head.appendChild(st);
+  const ancien=document.title;document.title="Point-"+slug(D.etab)+"-S"+D.s;
+  document.body.classList.add("mode-rapport");
+  const fin=()=>{document.body.classList.remove("mode-rapport");document.title=ancien;const e=document.getElementById("pg-land");if(e)e.remove();window.removeEventListener("afterprint",fin)};
+  window.addEventListener("afterprint",fin);
+  setTimeout(()=>window.print(),50);
 }
 async function majStatut(ids,st){
   try{
