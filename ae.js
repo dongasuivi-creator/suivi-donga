@@ -6,7 +6,7 @@ async function aeDemarrer(){
     const em=encodeURIComponent(sess.email);
     const [a,c]=await Promise.all([
       rest("affectations?select=id,nom,matiere,etablissement_id,etablissements(nom)&email=eq."+em+"&order=matiere"),
-      rest("censeurs?select=email,whatsapp,etablissement_id,etablissements(nom)&email=eq."+em)]);
+      rest("censeurs?select=email,whatsapp,role,etablissement_id,etablissements(nom)&email=eq."+em)]);
     if(!a.length&&!c.length){app.innerHTML=`<div class="card"><div class="msg err">Cette adresse (${esc(sess.email)}) n'est pas encore enregistrée. Demandez à votre censeur de vous ajouter comme AE.</div><button id="d">Se déconnecter</button></div>`;$("#d").onclick=deconnexion;return}
     AE.aff=a;AE.cens=c;AE.cur=a[0]||null;AE.tab=a.length?"valider":"aes";aeEcran();
   }catch(e){
@@ -18,10 +18,11 @@ function aeEcran(){
   const c=AE.cur;
   const tabs=[];
   if(AE.aff.length)tabs.push(["valider","À valider"],["saisir","Saisir pour un collègue"],["ens","Enseignants"]);
-  if(AE.cens.length)tabs.push(["aes","AE du collège"]);
+  if(AE.cens.some(x=>x.role==="DIRECTEUR"))tabs.push(["suivi","Suivi du collège"]);
+  if(AE.cens.length)tabs.push(["aes",AE.cens.some(x=>x.role==="DIRECTEUR")?"AE et censeurs":"AE du collège"]);
   tabs.push(["com","Communiqués"]);
   if(!tabs.some(t=>t[0]===AE.tab))AE.tab=tabs[0][0];
-  app.innerHTML=`<div class="card"><div class="row" style="align-items:center"><div style="flex:3"><h2>${c?"AE "+esc(c.matiere):"Censeur"}</h2><div class="mut">${esc(c?c.etablissements.nom:AE.cens[0].etablissements.nom)} · ${esc(sess.email)}</div></div>
+  app.innerHTML=`<div class="card"><div class="row" style="align-items:center"><div style="flex:3"><h2>${c?"AE "+esc(c.matiere):(AE.cens.some(x=>x.role==="DIRECTEUR")?"Directeur":"Censeur")}</h2><div class="mut">${esc(c?c.etablissements.nom:AE.cens[0].etablissements.nom)} · ${esc(sess.email)}</div></div>
   <button class="sec sm" id="q" style="flex:0 0 auto">Quitter</button></div>
   ${AE.aff.length>1?`<label>Discipline / collège</label><select id="sa">${AE.aff.map((a,i)=>`<option value="${i}" ${a.id===c.id?"selected":""}>${esc(a.matiere)} – ${esc(a.etablissements.nom)}</option>`).join("")}</select>`:""}
   ${c?`<label>Semaine n°</label><div class="row"><input id="sem" inputmode="numeric" value="${esc(AE.sem)}" style="flex:2"><button id="oksem" class="sec" style="margin:0">Afficher</button></div>`:""}</div>
@@ -36,7 +37,7 @@ function aeEcran(){
 }
 function aeOnglet(){
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===AE.tab));
-  ({valider:aeValider,saisir:aeSaisir,ens:aeEns,aes:censAE,com:aeCom})[AE.tab]();
+  ({valider:aeValider,saisir:aeSaisir,ens:aeEns,aes:censAE,suivi:dirSuivi,com:aeCom})[AE.tab]();
 }
 const semAE=()=>{const s=parseInt(AE.sem,10);return s>=1&&s<=45?s:null};
 async function aeValider(){

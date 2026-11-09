@@ -131,7 +131,7 @@ const ORDRE=[["ALLEMAND","ALLEMAND"],["ANGLAIS","ANGLAIS"],["ECONOMIE","ECONOMIE
 
 /* Synthèse départementale à partir des points validés (vue points_valides) */
 function synthese(rows,sem,dateFr,nom,tousEtabs){
-  const lignes=rows.map(r=>({etab:r.etablissement,matCode:r.matiere,mat:NOM_MAT[r.matiere]||r.matiere,matricule:r.matricule,nom:r.enseignant,cls:r.classe_formulaire,div:r.division,real:Number(r.taux_realise),prev:Number(r.taux_prevu),ecart:Number(r.ecart),stat:r.etat,motif:r.motif||""}))
+  const lignes=rows.map(r=>({etab:r.etablissement,ae:r.ae||"",matCode:r.matiere,mat:NOM_MAT[r.matiere]||r.matiere,matricule:r.matricule,nom:r.enseignant,cls:r.classe_formulaire,div:r.division,real:Number(r.taux_realise),prev:Number(r.taux_prevu),ecart:Number(r.ecart),stat:r.etat,motif:r.motif||""}))
     .filter(o=>!isNaN(o.real)&&!isNaN(o.prev));
   const discs={};lignes.forEach(o=>{(discs[o.matCode]=discs[o.matCode]||{mat:o.mat,l:[]}).l.push(o)});
   const lignesDisc=[];const obs=[];
@@ -165,7 +165,7 @@ function tableauMinistere(S){
 }
 function dirExcel(S){
   const H=v=>({v,s:3}),C=v=>({v,s:2}),D=v=>({v,s:4});
-  const t0=[{v:[{v:"Point de l'exécution des programmes d'études à la date du "+S.dateFr,s:5}],h:24},[{v:"Point de l'exécution des programmes d'études dans l'ESG — Département de la Donga — Semaine "+S.sem,s:1}],[],
+  const t0=[{v:[{v:"Point de l'exécution des programmes d'études à la date du "+S.dateFr,s:5}],h:24},[{v:"Point de l'exécution des programmes d'études dans l'ESG — "+(S.portee||"Département de la Donga")+" — Semaine "+S.sem,s:1}],[],
     {v:[H("Disciplines"),H("Taux d'exécution prévu (%)"),H("Taux d'exécution plus bas (%)"),H("Classes concernées"),H(""),H("Taux d'exécution plus élevé (%)"),H("Classes concernées"),H(""),H("OBS.")],h:34},
     {v:[H(""),H(""),H(""),H("Classes d'examen"),H("Classes intermédiaires"),H(""),H("Classes d'examen"),H("Classes intermédiaires"),H("")],h:30}];
   S.tab.forEach(r=>{const d=r.d;
@@ -175,20 +175,21 @@ function dirExcel(S){
   if(S.nom){t0.push([]);t0.push(["Établi par : "+S.nom])}
   const e2=[{v:["Collège"].concat(S.lignesDisc.map(d=>d.mat+" (%)"))}];
   S.matrice.forEach(r=>e2.push([r.etab].concat(r.cells.map(v=>v==null?"":Math.round(v*10)/10))));
-  const e3=[{v:["Collège","Discipline","Matricule","Nom et prénom","Classe","Division","Semaine","Taux prévu (%)","Taux réalisé (%)","Écart (points)","État","Motif"]}];
-  S.lignes.forEach(o=>e3.push([o.etab,o.mat,o.matricule,o.nom,o.cls,o.div,S.sem,o.prev,o.real,o.ecart,ETAT[o.stat]||"",o.motif]));
+  const avecAE=S.lignes.some(o=>o.ae);
+  const e3=[{v:["Collège","Discipline"].concat(avecAE?["AE"]:[]).concat(["Matricule","Nom et prénom","Classe","Division","Semaine","Taux prévu (%)","Taux réalisé (%)","Écart (points)","État","Motif"])}];
+  S.lignes.forEach(o=>e3.push([o.etab,o.mat].concat(avecAE?[o.ae]:[]).concat([o.matricule,o.nom,o.cls,o.div,S.sem,o.prev,o.real,o.ecart,ETAT[o.stat]||"",o.motif])));
   const f=[{nom:"Point d'exécution",rows:t0,larg:[20,13,13,34,34,13,34,34,40],fusions:["A4:A5","B4:B5","C4:C5","D4:E4","F4:F5","G4:H4","I4:I5"]},{nom:"Base de données",rows:e3,larg:[26,18,12,28,14,10,9,12,13,12,12,36]},{nom:"Collèges x disciplines",rows:e2,larg:[30].concat(S.lignesDisc.map(()=>16))}];
   if(S.manquants.length)f.push({nom:"Sans réponse",rows:[{v:["Collèges sans point validé pour la semaine "+S.sem]}].concat(S.manquants.map(x=>[x])),larg:[40]});
-  telechargerBlob(classeurXLSX(f),"Point-execution-programmes-Donga-S"+S.sem+".xlsx");
+  telechargerBlob(classeurXLSX(f),"Point-execution-programmes-"+(S.slugp||"Donga")+"-S"+S.sem+".xlsx");
 }
 function dirPDF(S){
-  let h='<h2 style="font-size:17px;margin:0 0 4px">Point de l\'exécution des programmes d\'études à la date du '+esc(S.dateFr)+'</h2><div style="font-weight:700;font-style:italic;margin-bottom:8px">Point de l\'exécution des programmes d\'études dans l\'ESG — Département de la Donga — Semaine '+S.sem+'</div>';
+  let h='<h2 style="font-size:17px;margin:0 0 4px">Point de l\'exécution des programmes d\'études à la date du '+esc(S.dateFr)+'</h2><div style="font-weight:700;font-style:italic;margin-bottom:8px">Point de l\'exécution des programmes d\'études dans l\'ESG — '+esc(S.portee||'Département de la Donga')+' — Semaine '+S.sem+'</div>';
   h+=tableauMinistere(S);
   if(S.manquants.length)h+='<div style="margin-top:8px"><b>Collèges sans point validé :</b> '+S.manquants.map(esc).join(", ")+"</div>";
   h+='<div class="sign"><div>Établi par<br>'+esc(S.nom||"")+'</div><div>Le Directeur Départemental</div></div>';
   $("#rapport").innerHTML=h;
   const st=document.createElement("style");st.id="pg-land";st.textContent="@page{size:A4 "+orientAuto()+";margin:10mm}";document.head.appendChild(st);
-  const ancien=document.title;document.title="Point-execution-programmes-Donga-S"+S.sem;
+  const ancien=document.title;document.title="Point-execution-programmes-"+(S.slugp||"Donga")+"-S"+S.sem;
   document.body.classList.add("mode-rapport");
   const fin=()=>{document.body.classList.remove("mode-rapport");document.title=ancien;const s=document.getElementById("pg-land");if(s)s.remove();window.removeEventListener("afterprint",fin)};
   window.addEventListener("afterprint",fin);
@@ -211,7 +212,7 @@ function formDefaut(code){
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="20";
+const VERSION_SITE="26";
 const REF_MAT = {};
 function chargerScript(url){
   return new Promise(res=>{
@@ -434,7 +435,7 @@ function accueil(){
   <div class="card"><h2>Bienvenue</h2>
   <p class="mut">Plateforme gratuite de suivi de l'exécution des programmes – Département de la Donga.</p>
   <button class="big b1" id="a-ens">👩‍🏫 Je suis enseignant<br><small>Envoyer mon point de la semaine</small></button>
-  <button class="big b2" id="a-ae">✅ AE ou censeur<br><small>Valider les points, gérer les AE de mon collège</small></button>
+  <button class="big b2" id="a-ae">✅ AE, Censeur ou Directeur<br><small>Valider les points, suivre et gérer mon collège</small></button>
   <button class="big b3" id="a-dir">🏛️ Direction Départementale<br><small>Tableaux de synthèse</small></button>
   <button class="big b4" id="a-enc">🎓 CCIP, Conseiller pédagogique, Inspecteur<br><small>Consulter les points, publier (CCIP)</small></button>
   </div>`;

@@ -66,16 +66,58 @@ async function dirPoints(){
 async function dirCens(){
   const z=$("#zone");z.innerHTML='<div class="card">Chargement…</div>';
   try{
-    const c=await rest("censeurs?select=email,nom,whatsapp,etablissements(nom)&order=email");
-    z.innerHTML=`<div class="card"><h3>Ajouter des censeurs</h3>
-    <p class="mut">Une ligne par censeur : <b>e-mail ; nom ; collège ; numéro WhatsApp</b></p>
+    const [c,etabs]=await Promise.all([rest("censeurs?select=email,nom,whatsapp,role,etablissements(nom)&order=email"),rest("etablissements?select=nom")]);
+    const connus=new Set(etabs.map(e=>e.nom.trim().toLowerCase()));
+    z.innerHTML=`<div class="card"><h3>Ajouter des censeurs ou des directeurs</h3>
+    <label>Ces personnes sont</label><select id="rl"><option value="CENSEUR">Censeurs</option><option value="DIRECTEUR">Directeurs de CEG (suivi du collège, ajout de censeurs et d'AE)</option></select>
+    <p class="mut">Une ligne par personne : <b>e-mail ; nom ; collège ; numéro WhatsApp</b></p>
+    <label>Ou importer un fichier CSV / TXT</label><input type="file" id="f" accept=".csv,.txt,text/csv,text/plain"><div id="fm"></div>
     <textarea id="t" rows="5" placeholder="censeur1@gmail.com ; KOFFI Jean ; CEG Barei ; 01 97 89 09 52&#10;censeur2@gmail.com ; ADJO Marie ; CEG Djougou 1 ; 01 90 00 00 00"></textarea>
     <button id="ad">Enregistrer</button><div id="m"></div></div>
-    <div class="card"><h3>Censeurs enregistrés (${c.length})</h3>${c.map(x=>`<p style="border-top:1px solid var(--br);padding-top:6px"><b>${esc(x.etablissements.nom)}</b> · ${esc(x.nom||"")} <span class="mut">${esc(x.email)} · ${x.whatsapp?esc(x.whatsapp):"numéro manquant"}</span> <button class="ko sm" data-d="${esc(x.email)}">Retirer</button></p>`).join("")||'<p class="mut">Aucun censeur.</p>'}</div>`;
+    <div class="card"><h3>Censeurs et directeurs enregistrés (${c.length})</h3>${c.map(x=>`<p style="border-top:1px solid var(--br);padding-top:6px"><b>${esc(x.etablissements.nom)}</b> · ${x.role==="DIRECTEUR"?'<span class="tag t-valide">Directeur</span> ':""}${esc(x.nom||"")} <span class="mut">${esc(x.email)} · ${x.whatsapp?esc(x.whatsapp):"numéro manquant"}</span> <button class="ko sm" data-d="${esc(x.email)}">Retirer</button></p>`).join("")||'<p class="mut">Aucun censeur.</p>'}</div>`;
+    const analyser=txt=>{
+      txt=txt.replace(/^﻿/,"");
+      const prem=(txt.split(/\r?\n/).find(x=>x.trim())||"");
+      const sep=[";","\t",","].map(s=>[s,prem.split(s).length]).sort((x,y)=>y[1]-x[1])[0][0];
+      const R=[];let row=[],cur="",q=false;
+      for(let i=0;i<txt.length;i++){const ch=txt[i];
+        if(q){if(ch==='"'){if(txt[i+1]==='"'){cur+='"';i++}else q=false}else cur+=ch}
+        else if(ch==='"')q=true;
+        else if(ch===sep){row.push(cur.trim());cur=""}
+        else if(ch==="\n"||ch==="\r"){if(ch==="\r"&&txt[i+1]==="\n")i++;row.push(cur.trim());cur="";if(row.some(x=>x))R.push(row);row=[]}
+        else cur+=ch}
+      row.push(cur.trim());if(row.some(x=>x))R.push(row);
+      let idx={e:0,n:1,c:2,w:3,r:4};
+      if(R.length&&!R[0].some(x=>x.includes("@"))){
+        const H=R.shift().map(x=>x.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,""));
+        const t=f=>H.findIndex(f);
+        const ie=t(h=>h.includes("mail")),inn=t(h=>/nom|prenom/.test(h)&&!/etab|colleg|cem|ceg/.test(h)),ic=t(h=>/colleg|etab|ceg|cem/.test(h)),iw=t(h=>/whats|tel|contact|numero/.test(h)),ir=t(h=>/fonction|role|poste|statut|qualite/.test(h));
+        if(ie>=0)idx={e:ie,n:inn,c:ic,w:iw,r:ir};
+      }
+      const g=(x,i)=>i>=0&&x[i]!=null?x[i]:"";
+      return R.filter(x=>g(x,idx.e).includes("@")).map(x=>({email:g(x,idx.e).toLowerCase(),nom:g(x,idx.n),etablissement:g(x,idx.c),whatsapp:g(x,idx.w),role:g(x,idx.r)}));
+    };
+    const roleDe=(x,defaut)=>x.role?(/direct|chef.*etab|proviseur/i.test(x.role.normalize("NFD").replace(/[̀-ͯ]/g,""))?"DIRECTEUR":"CENSEUR"):defaut;
+    $("#f").onchange=async e=>{
+      const f=e.target.files[0];if(!f)return;
+      let t=await f.text();if(t.includes("�"))t=new TextDecoder("windows-1252").decode(await f.arrayBuffer());
+      const l=analyser(t);
+      $("#t").value=l.map(x=>[x.email,x.nom,x.etablissement,x.whatsapp].concat(x.role?[x.role]:[]).join(" ; ")).join("\n");
+      const nd=l.filter(x=>roleDe(x,"")==="DIRECTEUR").length;
+      note($("#fm"),l.length+" ligne(s) lues"+(l.some(x=>x.role)?" ("+nd+" directeur(s), "+(l.length-nd)+" censeur(s) d'après la colonne Fonction)":" : tous seront enregistrés comme « "+($("#rl").value==="DIRECTEUR"?"Directeurs":"Censeurs")+" » (menu ci-dessus)")+". Vérifiez puis cliquez sur Enregistrer.","good");
+    };
     $("#ad").onclick=async()=>{
-      const l=$("#t").value.split(/\r?\n/).map(x=>x.split(/[;\t]/).map(y=>y.trim())).filter(x=>x[0]).map(x=>({email:x[0],nom:x[1]||"",etablissement:x[2]||"",whatsapp:x[3]||""}));
-      if(!l.length)return note($("#m"),"Rien à enregistrer");
-      try{const r=await rpc("ajouter_censeurs",{p_lignes:l});if(r.ok)dirCens();else note($("#m"),r.message)}catch(e){note($("#m"),e.message)}
+      const l=analyser($("#t").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).join("\n")).map(x=>({...x,role:roleDe(x,$("#rl").value)}));
+      if(!l.length)return note($("#m"),"Rien à enregistrer (chaque ligne doit contenir une adresse e-mail)");
+      const inconnus=[...new Set(l.map(x=>x.etablissement.trim()).filter(n=>n&&!connus.has(n.toLowerCase())))];
+      if(inconnus.length&&!confirm("Ces collèges n'existent pas encore et seront CRÉÉS :\n\n"+inconnus.join("\n")+"\n\nSi c'est une faute d'orthographe, annulez et corrigez le nom. Continuer ?"))return;
+      try{
+        for(const role of ["CENSEUR","DIRECTEUR"]){
+          const lot=l.filter(x=>x.role===role).map(x=>({email:x.email,nom:x.nom,etablissement:x.etablissement,whatsapp:x.whatsapp}));
+          if(lot.length){const r=await rpc("ajouter_censeurs",{p_lignes:lot,p_role:role});if(!r.ok)return note($("#m"),r.message)}
+        }
+        dirCens();
+      }catch(e){note($("#m"),e.message)}
     };
     z.querySelectorAll("[data-d]").forEach(b=>b.onclick=async()=>{
       if(!confirm("Retirer ce censeur ?"))return;
