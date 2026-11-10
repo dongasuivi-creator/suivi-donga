@@ -14,7 +14,7 @@ async function encDemarrer(){
 function encEcran(){
   const p=ENC.p;
   app.innerHTML=`<div class="card"><div class="row" style="align-items:center"><div style="flex:3"><h2>${esc(ROLE_ENC[p.role])}</h2><div class="mut">${esc(p.nom||"")} · ${esc(sess.email)}</div><div class="mut">${esc(libPortee(p))}</div></div><button class="sec sm" id="q" style="flex:0 0 auto">Quitter</button></div></div>
-  <div class="tabs"><button data-t="points">Points validés</button><button data-t="com">Communiqués</button></div><div id="zone"></div>`;
+  <div class="tabs"><button data-t="points">Points validés</button><button data-t="stats">Statistiques</button><button data-t="com">Communiqués</button></div><div id="zone"></div>`;
   $("#q").onclick=deconnexion;
   document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{ENC.tab=b.dataset.t;encOnglet()});
   encOnglet();
@@ -22,7 +22,7 @@ function encEcran(){
 function encOnglet(){
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===ENC.tab));
   if(ENC.tab==="com"&&ENC.p.role==="IPD")return dirCom({ipd:true});
-  ({points:encPoints,com:encCom})[ENC.tab]();
+  ({points:encPoints,stats:encStats,com:encCom})[ENC.tab]();
 }
 async function encCom(){
   const z=$("#zone");z.innerHTML='<div class="card">Chargement…</div>';

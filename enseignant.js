@@ -23,8 +23,8 @@ function ensEcran(){
   <label>Classe (niveau)</label><select id="cl">${cl.map(c=>`<option value="${c.code}">${esc(c.nom)}</option>`).join("")}</select>
   <div class="row"><div><label>Numéro / nom de la classe</label><input id="dv" placeholder="ex : M1, 2, B"></div>
   <div><label>Classe dans le formulaire de la Direction</label><select id="fc">${FORM_CLASSES.map(c=>`<option>${c}</option>`).join("")}</select></div></div>
-  <button id="ouv">Ouvrir mes notions</button><div id="m"></div></div>
-  <div id="ck"></div>
+  <button id="ouv">Ouvrir mes notions</button><button class="sec" id="sev">Statistiques des évaluations</button><div id="m"></div></div>
+  <div id="ck"></div><div id="sts"></div>
   <div class="card"><h3>Communiqués de la Direction</h3><div id="coms"><p class="mut">Chargement…</p></div></div>
   <div class="card"><h3>À envoyer à mon AE</h3><div id="liste"></div>
   <button class="ok" id="env" disabled>Envoyer à mon AE</button><button class="sec" id="sort">Quitter</button><div id="m2"></div></div>`;
@@ -64,6 +64,7 @@ function ensEcran(){
       }});
     $("#ck").scrollIntoView();
   };
+  $("#sev").onclick=ensStats;
   $("#env").onclick=async()=>{
     try{const r=await rpc("soumettre_point",{p_whatsapp:ENS.w,p_code:ENS.c,p_lignes:ENS.lignes},false);
       if(!r.ok)return note($("#m2"),r.message);

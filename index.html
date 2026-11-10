@@ -32,7 +32,8 @@ button:disabled{opacity:.5}
 .t-en_attente{background:var(--warn)}.t-valide{background:var(--ok)}.t-rejete{background:var(--ko)}
 .row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1 1 120px}
 .mut{color:var(--mut);font-size:14px}.right{text-align:right}
-table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid var(--br);padding:6px;text-align:left;vertical-align:top}th{background:#eceff3}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid var(--br);padding:6px;text-align:left;vertical-align:top}table.st{width:auto;font-size:13px}table.st th,table.st td{padding:4px 8px;text-align:center}table.st td:first-child,table.st th:first-child{text-align:left}
+th{background:#eceff3}
 .scroll{overflow-x:auto}
 .pill{font-size:13px;color:var(--mut)}
 a{color:var(--p)}
@@ -52,7 +53,7 @@ table.te{border-collapse:collapse;font-size:11px;width:100%}table.te th,table.te
   body.mode-rapport main,body.mode-rapport footer,body.mode-rapport header{display:none!important}
   body.mode-rapport #rapport{display:block}
   body.mode-rapport{background:#fff}
-  body.mode-rapport table.te{font-size:8px}body.mode-rapport table.te td,body.mode-rapport table.te th{white-space:normal}
+  body.mode-rapport table.st{font-size:10px}body.mode-rapport table.te{font-size:8px}body.mode-rapport table.te td,body.mode-rapport table.te th{white-space:normal}
 }
 
 .ck details{border:1px solid var(--br);border-radius:8px;margin:8px 0;background:#fff}
@@ -74,15 +75,16 @@ footer{text-align:center;color:var(--mut);font-size:13px;padding:20px}
 <header style="display:flex;gap:12px;align-items:center"><img src="icon-192.png" alt="" width="46" height="46" style="border-radius:10px"><div><h1>Suivi Hebdo Progression – Donga</h1></div></header>
 <main id="app"></main>
 <div id="rapport" class="rap"></div>
-<footer>Conçu par Francis EGOUNLETI · Remarques : WhatsApp 01 97 89 09 52<br><span style="font-size:12px">Version 29 · 10 novembre 2026</span></footer>
+<footer>Conçu par Francis EGOUNLETI · Remarques : WhatsApp 01 97 89 09 52<br><span style="font-size:12px">Version 30 · 10 novembre 2026</span></footer>
 
-<script src="noyau.js?v=29"></script>
-<script src="enseignant.js?v=29"></script>
-<script src="ae.js?v=29"></script>
-<script src="censeur.js?v=29"></script>
-<script src="direction.js?v=29"></script>
-<script src="encadreur.js?v=29"></script>
-<script src="installer.js?v=29"></script>
+<script src="noyau.js?v=30"></script>
+<script src="stats.js?v=30"></script>
+<script src="enseignant.js?v=30"></script>
+<script src="ae.js?v=30"></script>
+<script src="censeur.js?v=30"></script>
+<script src="direction.js?v=30"></script>
+<script src="encadreur.js?v=30"></script>
+<script src="installer.js?v=30"></script>
 <script>accueil();</script>
 </body>
 </html>
