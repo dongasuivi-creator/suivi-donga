@@ -13,14 +13,14 @@ async function dirDemarrer(){
 }
 function dirEcran(){
   app.innerHTML=`<div class="card"><div class="row" style="align-items:center"><div style="flex:3"><h2>Direction Départementale</h2><div class="mut">${esc(sess.email)}</div></div><button class="sec sm" id="q" style="flex:0 0 auto">Quitter</button></div></div>
-  <div class="tabs"><button data-t="points">Points validés</button><button data-t="com">Communiqués</button><button data-t="cens">Censeurs</button><button data-t="aes">AE inscrits</button><button data-t="enc">Encadreurs</button><button data-t="col">Collèges</button><button data-t="adm">Administrateurs</button></div><div id="zone"></div>`;
+  <div class="tabs"><button data-t="points">Points validés</button><button data-t="com">Communiqués</button><button data-t="cens">Censeurs</button><button data-t="aes">AE inscrits</button><button data-t="enc">Encadreurs</button><button data-t="col">Collèges</button><button data-t="adm">Administrateurs</button><button data-t="sau">Sauvegarde</button></div><div id="zone"></div>`;
   $("#q").onclick=deconnexion;
   document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{DIR.tab=b.dataset.t;dirOnglet()});
   dirOnglet();
 }
 function dirOnglet(){
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===DIR.tab));
-  ({points:dirPoints,com:dirCom,cens:dirCens,aes:dirAes,enc:dirEnc,col:dirCol,adm:dirAdm})[DIR.tab]();
+  ({points:dirPoints,com:dirCom,cens:dirCens,aes:dirAes,enc:dirEnc,col:dirCol,adm:dirAdm,sau:dirSauv})[DIR.tab]();
 }
 async function dirPoints(){
   const z=$("#zone");
@@ -296,4 +296,115 @@ async function dirCol(){
     };
     rend();$("#fq").oninput=rend;$("#sc").onchange=rend;
   }catch(e){z.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
+}
+
+
+/* ====== Sauvegarde et restauration (Direction) ====== */
+const SAUV_TABLES=["etablissements","direction_users","affectations","enseignants","soumissions","demandes_ae","censeurs","communiques","communique_pdf","parametres","encadreurs"];
+const SAUV_TITRE={etablissements:"Collèges",direction_users:"Administrateurs",affectations:"AE",enseignants:"Enseignants",soumissions:"Points",demandes_ae:"Demandes AE",censeurs:"Censeurs et directeurs",communiques:"Communiqués",communique_pdf:"PDF des communiqués",parametres:"Paramètres",encadreurs:"Encadreurs"};
+async function sauvLire(t,depuis,jusqua,secret){
+  const taille=t==="communique_pdf"?10:500;let tout=[],off=0;
+  for(;;){
+    const r=await rpc("sauvegarde_table",{p_table:t,p_depuis:depuis||null,p_jusqua:jusqua||null,p_decalage:off,p_taille:taille,p_secret:!!secret});
+    tout=tout.concat(r||[]);if(!r||r.length<taille)break;off+=taille;
+  }
+  return tout;
+}
+function sauvDate(d){return d.toISOString().slice(0,10)}
+function sauvPeriode(type){
+  const j=new Date();j.setHours(12,0,0,0);
+  if(type==="sem"){const l=new Date(j);l.setDate(j.getDate()-((j.getDay()+6)%7));const d=new Date(l);d.setDate(l.getDate()+6);return[sauvDate(l),sauvDate(d)]}
+  if(type==="mois"){return[sauvDate(new Date(j.getFullYear(),j.getMonth(),1,12)),sauvDate(new Date(j.getFullYear(),j.getMonth()+1,0,12))]}
+  const a=j.getMonth()>=8?j.getFullYear():j.getFullYear()-1;return[a+"-09-01",(a+1)+"-08-31"];
+}
+function sauvDernier(){try{return localStorage.getItem("sdh.sauv")||""}catch(e){return""}}
+function sauvMarquer(){try{localStorage.setItem("sdh.sauv",new Date().toISOString())}catch(e){}}
+function sauvRappel(){
+  const d=sauvDernier();
+  if(!d)return '<div class="msg err">Aucune sauvegarde complète faite depuis cet appareil. Pensez à en faire une régulièrement.</div>';
+  const n=Math.floor((Date.now()-new Date(d).getTime())/86400000);
+  const q=new Date(d).toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+  return `<div class="msg ${n>7?"err":"ok"}">Dernière sauvegarde complète (depuis cet appareil) : ${q}, il y a ${n} jour${n>1?"s":""}.${n>7?" Pensez à en refaire une.":""}</div>`;
+}
+async function dirSauv(){
+  const z=$("#zone"),p0=sauvPeriode("mois");
+  z.innerHTML=`<div class="card"><h3>Sauvegarde par période (Excel)</h3>
+  <p class="mut">Un classeur Excel avec les points de la période, les enseignants, les AE, les censeurs et directeurs, les collèges et les communiqués. Pour consulter ou archiver.</p>
+  <div class="row"><button class="sec sm" data-p="sem">Cette semaine</button><button class="sec sm" data-p="mois">Ce mois</button><button class="sec sm" data-p="an">Année scolaire</button></div>
+  <div class="row"><div><label>Du</label><input id="sd" type="date" value="${p0[0]}"></div><div><label>Au</label><input id="sf" type="date" value="${p0[1]}"></div></div>
+  <button class="ok" id="sx">Télécharger la sauvegarde Excel</button><div id="sm1"></div></div>
+  <div class="card"><h3>Sauvegarde complète (pour restaurer)</h3>
+  <p class="mut">Un fichier contenant <b>toutes</b> les données de la plateforme, avec les codes d’accès cryptés des enseignants. Il permet de tout remettre en place après un incident.</p>
+  <div class="msg err">Ce fichier est confidentiel : ne le partagez pas et gardez-le en lieu sûr.</div>
+  ${sauvRappel()}
+  <button class="ok" id="sc">Télécharger la sauvegarde complète</button><div id="sm2"></div></div>
+  <div class="card"><h3>Restaurer une sauvegarde complète</h3>
+  <p class="mut">Choisissez un fichier de sauvegarde complète. Les données du fichier sont <b>ajoutées ou mises à jour</b> ; rien n’est effacé.</p>
+  <input id="sf2" type="file" accept=".json,application/json"><button class="ko" id="sr">Restaurer</button><div id="sm3"></div></div>`;
+  z.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const p=sauvPeriode(b.dataset.p);$("#sd").value=p[0];$("#sf").value=p[1]});
+  $("#sx").onclick=sauvExcel;$("#sc").onclick=sauvComplete;$("#sr").onclick=sauvRestaurer;
+}
+async function sauvExcel(){
+  const m=$("#sm1"),b=$("#sx"),d=$("#sd").value,f=$("#sf").value;
+  if(!d||!f||d>f){note(m,"Choisissez une période valide.");return}
+  b.disabled=true;note(m,"Préparation de la sauvegarde…","ok");
+  try{
+    const T={};
+    for(const t of SAUV_TABLES.filter(x=>x!=="communique_pdf")){note(m,"Lecture : "+SAUV_TITRE[t]+"…","ok");T[t]=await sauvLire(t,d,f,false)}
+    const E={};(T.etablissements||[]).forEach(e=>E[e.id]=e);
+    const EN={};(T.enseignants||[]).forEach(e=>EN[e.id]=e);
+    const nm=id=>E[id]?E[id].nom:"";
+    const dateFr=x=>x?new Date(x).toLocaleDateString("fr-FR"):"";
+    const pts=[{v:["Collège","Commune","Discipline","Enseignant","Matricule","Classe","Division","Semaine","Date du point","Prévu (%)","Réalisé (%)","Écart","État","Motif","Statut","Saisi par","Validé le","Validé par"]}];
+    (T.soumissions||[]).slice().sort((a,b)=>String(nm(a.etablissement_id)).localeCompare(nm(b.etablissement_id))||String(a.matiere).localeCompare(b.matiere)||a.semaine-b.semaine).forEach(r=>{const en=EN[r.enseignant_id]||{};
+      pts.push([nm(r.etablissement_id),(E[r.etablissement_id]||{}).commune||"",r.matiere,en.nom||"",en.matricule||"",r.classe_formulaire,r.division,r.semaine,dateFr(r.date_situation),r.taux_prevu,r.taux_realise,r.ecart,(typeof ETAT!=="undefined"&&ETAT[r.etat])||r.etat||"",r.motif,r.statut,r.saisi_par,dateFr(r.valide_le),r.valide_par||""])});
+    const generique=(t,titre)=>{
+      const lg=T[t]||[];const cles=[];lg.forEach(r=>Object.keys(r).forEach(k=>{if(cles.indexOf(k)<0&&k!=="id"&&k!=="etablissement_id"&&k!=="code_hash")cles.push(k)}));
+      const avecE=lg.some(r=>r.etablissement_id);
+      const rows=[{v:(avecE?["Collège"]:[]).concat(cles)}];
+      lg.forEach(r=>rows.push((avecE?[nm(r.etablissement_id)]:[]).concat(cles.map(k=>{const v=r[k];return v==null?"":(typeof v==="object"?JSON.stringify(v):v)}))));
+      return{nom:titre,rows,larg:(avecE?[26]:[]).concat(cles.map(()=>20))};
+    };
+    const feuilles=[{nom:"Points",rows:pts,larg:[26,16,12,26,12,10,9,8,12,9,9,8,12,30,10,10,12,26]},
+      generique("enseignants","Enseignants"),generique("affectations","AE"),generique("censeurs","Censeurs et directeurs"),
+      generique("etablissements","Collèges"),generique("communiques","Communiqués"),generique("encadreurs","Encadreurs")];
+    telechargerBlob(classeurXLSX(feuilles),"Sauvegarde-Donga-"+d+"-au-"+f+".xlsx");
+    note(m,`Sauvegarde téléchargée : ${(T.soumissions||[]).length} point(s) du ${dateFr(d)} au ${dateFr(f)}.`,"ok");
+  }catch(e){note(m,e.message)}
+  b.disabled=false;
+}
+async function sauvComplete(){
+  const m=$("#sm2"),b=$("#sc");b.disabled=true;
+  try{
+    const T={};let n=0;
+    for(const t of SAUV_TABLES){note(m,"Lecture : "+SAUV_TITRE[t]+"…","ok");T[t]=await sauvLire(t,null,null,true);n+=T[t].length}
+    const fich={application:"suivi-hebdo-donga",version:1,date:new Date().toISOString(),tables:T};
+    const dt=aujourdhui();
+    telechargerBlob(new Blob([JSON.stringify(fich)],{type:"application/json"}),"Sauvegarde-complete-Donga-"+dt+".json");
+    sauvMarquer();
+    note(m,`Sauvegarde complète téléchargée (${n} lignes). Gardez ce fichier en lieu sûr.`,"ok");
+  }catch(e){note(m,e.message)}
+  b.disabled=false;
+}
+async function sauvRestaurer(){
+  const m=$("#sm3"),fi=$("#sf2").files[0];
+  if(!fi){note(m,"Choisissez d’abord un fichier de sauvegarde complète.");return}
+  let F;try{F=JSON.parse(await fi.text())}catch(e){note(m,"Ce fichier n’est pas une sauvegarde valide.");return}
+  if(!F||F.application!=="suivi-hebdo-donga"||!F.tables){note(m,"Ce fichier n’est pas une sauvegarde de cette plateforme.");return}
+  const n=SAUV_TABLES.reduce((s,t)=>s+((F.tables[t]||[]).length),0);
+  const dt=F.date?new Date(F.date).toLocaleDateString("fr-FR"):"date inconnue";
+  if(!confirm("Restaurer la sauvegarde du "+dt+" ("+n+" lignes) ?\n\nLes données du fichier seront ajoutées ou mises à jour. Rien ne sera effacé."))return;
+  const b=$("#sr");b.disabled=true;
+  try{
+    let fait=0;
+    for(const t of SAUV_TABLES){
+      const lg=F.tables[t]||[];const taille=t==="communique_pdf"?3:200;
+      for(let i=0;i<lg.length;i+=taille){
+        note(m,`Restauration : ${SAUV_TITRE[t]} (${Math.min(i+taille,lg.length)}/${lg.length})…`,"ok");
+        await rpc("restaurer_table",{p_table:t,p_lignes:lg.slice(i,i+taille)});fait+=Math.min(taille,lg.length-i);
+      }
+    }
+    note(m,`Restauration terminée : ${fait} ligne(s) traitée(s).`,"ok");
+  }catch(e){note(m,"Restauration interrompue : "+e.message+" — vous pouvez relancer, rien n’est dupliqué.")}
+  b.disabled=false;
 }
