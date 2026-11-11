@@ -20,10 +20,10 @@ function ensEcran(){
   const dernier=(()=>{try{return JSON.parse(localStorage.getItem("sdh.ens.sel."+ENS.w)||"null")}catch(e){return null}})()||{};
   app.innerHTML=`<div class="card">${entete("Bonjour "+ENS.nom,false)}
   <p class="mut">${esc(NOM_MAT[ENS.matiere]||ENS.matiere)} · ${esc(ENS.etab)}</p>
-  <label>Classe (niveau)</label><select id="cl">${cl.map(c=>`<option value="${c.code}">${esc(c.nom)}</option>`).join("")}</select>
-  <div class="row"><div><label>Numéro de la classe</label><select id="dv">${Array.from({length:15},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join("")}</select></div>
-  <div><label>Classe dans le formulaire de la Direction</label><select id="fc">${FORM_CLASSES.map(c=>`<option>${c}</option>`).join("")}</select></div></div>
-  <button id="ouv">Ouvrir mes notions</button><button class="sec" id="sev">Statistiques des évaluations</button><div id="m"></div></div>
+  <label>1. Classe (niveau)</label><select id="cl">${cl.map(c=>`<option value="${c.code}">${esc(c.nom)}</option>`).join("")}</select>
+  <div class="row"><div><label>2. Numéro de la classe</label><select id="dv">${Array.from({length:15},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join("")}</select></div>
+  <div><label>3. Classe dans le formulaire de la Direction</label><select id="fc">${FORM_CLASSES.map(c=>`<option>${c}</option>`).join("")}</select></div></div>
+  <label>4. Ouvrez vos notions</label><button id="ouv">Ouvrir mes notions</button><button class="sec" id="sev">Statistiques des évaluations</button><div id="m"></div></div>
   <div id="ck"></div><div id="sts"></div>
   <div class="card"><h3>Communiqués de la Direction</h3><div id="coms"><p class="mut">Chargement…</p></div></div>
   <div class="card"><h3>À envoyer à mon AE</h3><div id="liste"></div>
@@ -52,6 +52,7 @@ function ensEcran(){
   }).catch(()=>{const z=$("#coms");if(z)z.innerHTML='<p class="mut">Communiqués indisponibles.</p>'});
   $("#ouv").onclick=()=>{
     const code=$("#cl").value,dv=normDiv($("#dv").value),fc=$("#fc").value;
+    if(!classeCoherente(code,fc))return note($("#m"),"Incohérence : le niveau choisi en 1 ne correspond pas à la classe du formulaire en 3. Corrigez.");
     try{localStorage.setItem("sdh.ens.sel."+ENS.w,JSON.stringify({cl:code,dv,fc}))}catch(e){}
     const cle="sdh.coches."+ENS.w+"."+ENS.matiere+"."+code+"."+dv;
     let C={};try{C=JSON.parse(localStorage.getItem(cle)||"{}")}catch(e){}

@@ -150,14 +150,17 @@ async function aeSaisir(){
     const ens=await rest(`enseignants?select=id,nom,matricule&etablissement_id=eq.${c.etablissement_id}&matiere=eq.${c.matiere}&actif=eq.true&order=nom`);
     if(!ens.length){z.innerHTML='<div class="msg info">Ajoutez d\'abord vos collègues dans l\'onglet « Enseignants ».</div>';return}
     z.innerHTML=`<div class="card"><h3>Saisir le point d'un collègue</h3>
-    <label>Enseignant</label><select id="en">${ens.map(e=>`<option value="${e.id}" ${AE.pre===e.id?"selected":""}>${esc(e.nom)}</option>`).join("")}</select>
-    <label>Classe (niveau)</label><select id="cl">${listeClasses(c.matiere).map(x=>`<option value="${x.code}">${esc(x.nom)}</option>`).join("")}</select>
-    <div class="row"><div><label>Numéro de la classe</label><select id="dv">${Array.from({length:15},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join("")}</select></div>
-    <div><label>Classe dans le formulaire de la Direction</label><select id="fc">${FORM_CLASSES.map(x=>`<option>${x}</option>`).join("")}</select></div></div>
+    <label>1. Enseignant</label><select id="en">${ens.map(e=>`<option value="${e.id}" ${AE.pre===e.id?"selected":""}>${esc(e.nom)}</option>`).join("")}</select>
+    <label>2. Classe (niveau)</label><select id="cl">${listeClasses(c.matiere).map(x=>`<option value="${x.code}">${esc(x.nom)}</option>`).join("")}</select>
+    <div class="row"><div><label>3. Numéro de la classe</label><select id="dv">${Array.from({length:15},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join("")}</select></div>
+    <div><label>4. Classe dans le formulaire de la Direction <span class="mut">(doit correspondre au niveau choisi en 2)</span></label><select id="fc">${FORM_CLASSES.map(x=>`<option>${x}</option>`).join("")}</select></div></div>
+    <label>5. Contrôlez, puis ouvrez les notions</label><p class="mut" id="rec"></p>
     <button id="ouv">Ouvrir les notions</button><div id="m"></div></div><div id="ck"></div>`;
-    const majFc=()=>{$("#fc").value=formDefaut($("#cl").value)};majFc();$("#cl").onchange=majFc;
+    const rec=()=>{const nv=$("#cl").selectedOptions[0].textContent;$("#rec").innerHTML="<b>"+esc($("#en").selectedOptions[0].textContent)+"</b> · "+esc(nv)+" · classe n° "+$("#dv").value+" · formulaire : "+esc($("#fc").value)};
+    const majFc=()=>{$("#fc").value=formDefaut($("#cl").value);rec()};majFc();$("#cl").onchange=majFc;["en","dv","fc"].forEach(i=>$("#"+i).onchange=rec);
     $("#ouv").onclick=async()=>{
       const eid=$("#en").value,code=$("#cl").value,dv=normDiv($("#dv").value),fc=$("#fc").value;
+      if(!classeCoherente(code,fc))return note($("#m"),"Incohérence : vous avez choisi « "+$("#cl").selectedOptions[0].textContent+" » au point 2 mais « "+fc+" » au point 4. Corrigez avant de continuer.");
       let C={},motif="";
       try{
         const prev=await rest(`soumissions?select=coches,motif&enseignant_id=eq.${eid}&classe_code=eq.${encodeURIComponent(code)}&division=eq.${encodeURIComponent(dv)}&coches=not.is.null&order=semaine.desc&limit=1`);

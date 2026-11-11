@@ -198,6 +198,7 @@ function dirPDF(S){
 
 
 const FORM_CLASSES = ['6ème','5ème','4ème','3ème','2nde A2','2nde B','2nde C','2nde D','2nde STT','2nde STI','1ère A2','1ère B','1ère C','1ère D','1ère STT','1ère STI','Tle A2','Tle B','Tle C','Tle D','Tle STT','Tle STI'];
+function classeCoherente(code,fc){const a=String(formDefaut(code)).split(" ")[0],b=String(fc).split(" ")[0];return a===b}
 function formDefaut(code){
   const m = {'6E':'6ème','5E':'5ème','4E':'4ème','3E':'3ème'};
   if(m[code]) return m[code];
@@ -212,7 +213,7 @@ function formDefaut(code){
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="33"
+const VERSION_SITE="34"
 const normDiv=s=>{const t=String(s||"").replace(/\s+/g,"").toUpperCase();return t};;
 const REF_MAT = {};
 function chargerScript(url){
