@@ -208,12 +208,12 @@ function formDefaut(code){
   let serie = 'A2';
   if(/^CD|^C$|^S$/.test(suf)) serie = 'C';
   else if(/^AB/.test(suf)) serie = 'A2';
-  else if(/^EFG/.test(suf)) serie = 'D';
+  else if(/^D$|^EFG/.test(suf)) serie = 'D';
   return pre + serie;
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="35"
+const VERSION_SITE="36"
 const normDiv=s=>{const t=String(s||"").replace(/\s+/g,"").toUpperCase();return t};;
 const REF_MAT = {};
 function chargerScript(url){
