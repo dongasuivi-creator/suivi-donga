@@ -152,7 +152,7 @@ async function aeSaisir(){
     z.innerHTML=`<div class="card"><h3>Saisir le point d'un collègue</h3>
     <label>Enseignant</label><select id="en">${ens.map(e=>`<option value="${e.id}" ${AE.pre===e.id?"selected":""}>${esc(e.nom)}</option>`).join("")}</select>
     <label>Classe (niveau)</label><select id="cl">${listeClasses(c.matiere).map(x=>`<option value="${x.code}">${esc(x.nom)}</option>`).join("")}</select>
-    <div class="row"><div><label>Numéro / nom de la classe</label><input id="dv" placeholder="ex : M1, 2, B"></div>
+    <div class="row"><div><label>Numéro de la classe</label><select id="dv">${Array.from({length:15},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join("")}</select></div>
     <div><label>Classe dans le formulaire de la Direction</label><select id="fc">${FORM_CLASSES.map(x=>`<option>${x}</option>`).join("")}</select></div></div>
     <button id="ouv">Ouvrir les notions</button><div id="m"></div></div><div id="ck"></div>`;
     const majFc=()=>{$("#fc").value=formDefaut($("#cl").value)};majFc();$("#cl").onchange=majFc;

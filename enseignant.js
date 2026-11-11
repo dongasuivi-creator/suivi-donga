@@ -21,7 +21,7 @@ function ensEcran(){
   app.innerHTML=`<div class="card">${entete("Bonjour "+ENS.nom,false)}
   <p class="mut">${esc(NOM_MAT[ENS.matiere]||ENS.matiere)} · ${esc(ENS.etab)}</p>
   <label>Classe (niveau)</label><select id="cl">${cl.map(c=>`<option value="${c.code}">${esc(c.nom)}</option>`).join("")}</select>
-  <div class="row"><div><label>Numéro / nom de la classe</label><input id="dv" placeholder="ex : M1, 2, B"></div>
+  <div class="row"><div><label>Numéro de la classe</label><select id="dv">${Array.from({length:15},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join("")}</select></div>
   <div><label>Classe dans le formulaire de la Direction</label><select id="fc">${FORM_CLASSES.map(c=>`<option>${c}</option>`).join("")}</select></div></div>
   <button id="ouv">Ouvrir mes notions</button><button class="sec" id="sev">Statistiques des évaluations</button><div id="m"></div></div>
   <div id="ck"></div><div id="sts"></div>
@@ -29,7 +29,7 @@ function ensEcran(){
   <div class="card"><h3>À envoyer à mon AE</h3><div id="liste"></div>
   <button class="ok" id="env" disabled>Envoyer à mon AE</button><button class="sec" id="sort">Quitter</button><div id="m2"></div></div>`;
   if(dernier.cl&&cl.some(c=>c.code===dernier.cl))$("#cl").value=dernier.cl;
-  $("#dv").value=dernier.dv||"";
+  {const n=String(dernier.dv||"").replace(/\D/g,"");$("#dv").value=(+n>=1&&+n<=15)?String(+n):"1"}
   const majFc=()=>{$("#fc").value=(dernier.fc&&$("#cl").value===dernier.cl)?dernier.fc:formDefaut($("#cl").value)};
   majFc();$("#cl").onchange=()=>{dernier.cl=null;majFc()};
   $("#sort").onclick=()=>{ENS=null;accueil()};
