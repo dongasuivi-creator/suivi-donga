@@ -136,7 +136,7 @@ function dirStats(){
 }
 /* Saisie par l'enseignant */
 async function ensStats(){
-  const code=$("#cl").value,dv=$("#dv").value.trim(),fc=$("#fc").value,box=$("#sts");
+  const code=$("#cl").value,dv=normDiv($("#dv").value),fc=$("#fc").value,box=$("#sts");
   const nomCl=(listeClasses(ENS.matiere).find(c=>c.code===code)||{}).nom||code;
   let ex=[];try{const r=await rpc("mes_stats",{p_whatsapp:ENS.w,p_code:ENS.c},false);if(r.ok)ex=r.rows}catch(e){}
   box.innerHTML=`<div class="card"><h3>Statistiques des évaluations</h3><p class="mut">${esc(nomCl)} ${esc(dv)}</p>

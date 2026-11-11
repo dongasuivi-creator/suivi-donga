@@ -212,7 +212,8 @@ function formDefaut(code){
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="31";
+const VERSION_SITE="32"
+const normDiv=s=>String(s||"").replace(/\s+/g,"").toUpperCase();;
 const REF_MAT = {};
 function chargerScript(url){
   return new Promise(res=>{

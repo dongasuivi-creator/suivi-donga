@@ -51,7 +51,7 @@ function ensEcran(){
     });
   }).catch(()=>{const z=$("#coms");if(z)z.innerHTML='<p class="mut">Communiqués indisponibles.</p>'});
   $("#ouv").onclick=()=>{
-    const code=$("#cl").value,dv=$("#dv").value.trim(),fc=$("#fc").value;
+    const code=$("#cl").value,dv=normDiv($("#dv").value),fc=$("#fc").value;
     try{localStorage.setItem("sdh.ens.sel."+ENS.w,JSON.stringify({cl:code,dv,fc}))}catch(e){}
     const cle="sdh.coches."+ENS.w+"."+ENS.matiere+"."+code+"."+dv;
     let C={};try{C=JSON.parse(localStorage.getItem(cle)||"{}")}catch(e){}

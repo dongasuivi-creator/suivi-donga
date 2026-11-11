@@ -99,6 +99,7 @@ function carteSoum(r){
 
 /* ---- Téléchargement du point de la semaine (collège + discipline de l'AE) ---- */
 function aePointDonnees(rows,sans,s){
+  { const m=new Map();rows.forEach(r=>{const k=[r.enseignant_id||(r.enseignants||{}).nom,r.classe_code,normDiv(r.division)].join("|"),o=m.get(k);if(!o||(r.statut==="valide"&&o.statut!=="valide")||(r.statut===o.statut&&String(r.maj_le||"")>String(o.maj_le||"")))m.set(k,r)});rows=[...m.values()]; }
   const c=AE.cur,etab=c.etablissements.nom,mat=NOM_MAT[c.matiere]||c.matiere;
   const tri=rows.slice().sort((x,y)=>String((x.enseignants||{}).nom||"").localeCompare(String((y.enseignants||{}).nom||""))||String(x.classe_formulaire).localeCompare(String(y.classe_formulaire)));
   const L=tri.map(r=>{const en=r.enseignants||{};return [en.nom||"",en.matricule||"",(r.classe_formulaire||"")+" "+(r.division||""),r.taux_prevu,r.taux_realise,r.ecart,ETAT[r.etat]||"",STAT[r.statut]||"",r.motif||""]});
@@ -156,7 +157,7 @@ async function aeSaisir(){
     <button id="ouv">Ouvrir les notions</button><div id="m"></div></div><div id="ck"></div>`;
     const majFc=()=>{$("#fc").value=formDefaut($("#cl").value)};majFc();$("#cl").onchange=majFc;
     $("#ouv").onclick=async()=>{
-      const eid=$("#en").value,code=$("#cl").value,dv=$("#dv").value.trim(),fc=$("#fc").value;
+      const eid=$("#en").value,code=$("#cl").value,dv=normDiv($("#dv").value),fc=$("#fc").value;
       let C={},motif="";
       try{
         const prev=await rest(`soumissions?select=coches,motif&enseignant_id=eq.${eid}&classe_code=eq.${encodeURIComponent(code)}&division=eq.${encodeURIComponent(dv)}&coches=not.is.null&order=semaine.desc&limit=1`);
