@@ -26,7 +26,7 @@ function aeEcran(){
   app.innerHTML=`<div class="card"><div class="row" style="align-items:center"><div style="flex:3"><h2>${c?"AE "+esc(c.matiere):(AE.cens.some(x=>x.role==="DIRECTEUR")?"Directeur":"Censeur")}</h2><div class="mut">${esc(c?c.etablissements.nom:AE.cens[0].etablissements.nom)} · ${esc(sess.email)}</div></div>
   <button class="sec sm" id="q" style="flex:0 0 auto">Quitter</button></div>
   ${AE.aff.length>1?`<label>Discipline / collège</label><select id="sa">${AE.aff.map((a,i)=>`<option value="${i}" ${a.id===c.id?"selected":""}>${esc(a.matiere)} – ${esc(a.etablissements.nom)}</option>`).join("")}</select>`:""}
-  ${c?`<label>Semaine n°</label><div class="row"><input id="sem" inputmode="numeric" value="${esc(AE.sem)}" style="flex:2"><button id="oksem" class="sec" style="margin:0">Afficher</button></div>`:""}</div>
+  ${c?`<label id="lsem">Semaine n°</label><div class="row"><input id="sem" inputmode="numeric" value="${esc(AE.sem)}" style="flex:2"><button id="oksem" class="sec" style="margin:0">Afficher</button></div>`:""}</div>
   <div class="tabs">${tabs.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join("")}</div>
   <div id="zone"></div>`;
   $("#q").onclick=deconnexion;
@@ -37,6 +37,7 @@ function aeEcran(){
   aeOnglet();
 }
 function aeOnglet(){
+  { const l=$("#lsem");if(l)l.textContent=AE.tab==="saisir"?"1. Semaine n° (puis touchez Afficher)":"Semaine n°"; }
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===AE.tab));
   ({valider:aeValider,saisir:aeSaisir,ens:aeEns,aes:censAE,suivi:dirSuivi,stats:aeStats,cstats:censStats,merite:merCollege,com:aeCom})[AE.tab]();
 }
@@ -150,23 +151,24 @@ async function aeSaisir(){
     const ens=await rest(`enseignants?select=id,nom,matricule&etablissement_id=eq.${c.etablissement_id}&matiere=eq.${c.matiere}&actif=eq.true&order=nom`);
     if(!ens.length){z.innerHTML='<div class="msg info">Ajoutez d\'abord vos collègues dans l\'onglet « Enseignants ».</div>';return}
     z.innerHTML=`<div class="card"><h3>Saisir le point d'un collègue</h3>
-    <label>1. Enseignant</label><select id="en">${ens.map(e=>`<option value="${e.id}" ${AE.pre===e.id?"selected":""}>${esc(e.nom)}</option>`).join("")}</select>
-    <label>2. Classe (niveau)</label><select id="cl">${listeClasses(c.matiere).map(x=>`<option value="${x.code}">${esc(x.nom)}</option>`).join("")}</select>
-    <div class="row"><div><label>3. Numéro de la classe</label><select id="dv">${Array.from({length:15},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join("")}</select></div>
-    <div><label>4. Classe dans le formulaire de la Direction <span class="mut">(doit correspondre au niveau choisi en 2)</span></label><select id="fc">${FORM_CLASSES.map(x=>`<option>${x}</option>`).join("")}</select></div></div>
-    <label>5. Contrôlez, puis ouvrez les notions</label><p class="mut" id="rec"></p>
+    <label>2. Enseignant</label><select id="en">${ens.map(e=>`<option value="${e.id}" ${AE.pre===e.id?"selected":""}>${esc(e.nom)}</option>`).join("")}</select>
+    <label>3. Classe (niveau)</label><select id="cl">${listeClasses(c.matiere).map(x=>`<option value="${x.code}">${esc(x.nom)}</option>`).join("")}</select>
+    <div class="row"><div><label>4. Numéro de la classe</label><select id="dv">${Array.from({length:15},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join("")}</select></div>
+    <div><label>5. Classe dans le formulaire de la Direction <span class="mut">(doit correspondre au niveau choisi en 3)</span></label><select id="fc">${FORM_CLASSES.map(x=>`<option>${x}</option>`).join("")}</select></div></div>
+    <label>6. Contrôlez, puis ouvrez les notions</label><p class="mut" id="rec"></p>
     <button id="ouv">Ouvrir les notions</button><div id="m"></div></div><div id="ck"></div>`;
-    const rec=()=>{const nv=$("#cl").selectedOptions[0].textContent;$("#rec").innerHTML="<b>"+esc($("#en").selectedOptions[0].textContent)+"</b> · "+esc(nv)+" · classe n° "+$("#dv").value+" · formulaire : "+esc($("#fc").value)};
+    const sw=SEMAINES_REF.find(x=>x[0]===+AE.sem);
+    const rec=()=>{const nv=$("#cl").selectedOptions[0].textContent;$("#rec").innerHTML="Semaine "+esc(AE.sem)+(sw?" ("+esc(periodeSemaine(+AE.sem))+")":"")+" · <b>"+esc($("#en").selectedOptions[0].textContent)+"</b> · "+esc(nv)+" · classe n° "+$("#dv").value+" · formulaire : "+esc($("#fc").value)};
     const majFc=()=>{$("#fc").value=formDefaut($("#cl").value);rec()};majFc();$("#cl").onchange=majFc;["en","dv","fc"].forEach(i=>$("#"+i).onchange=rec);
     $("#ouv").onclick=async()=>{
       const eid=$("#en").value,code=$("#cl").value,dv=normDiv($("#dv").value),fc=$("#fc").value;
-      if(!classeCoherente(code,fc))return note($("#m"),"Incohérence : vous avez choisi « "+$("#cl").selectedOptions[0].textContent+" » au point 2 mais « "+fc+" » au point 4. Corrigez avant de continuer.");
+      if(!classeCoherente(code,fc))return note($("#m"),"Incohérence : vous avez choisi « "+$("#cl").selectedOptions[0].textContent+" » au point 3 mais « "+fc+" » au point 5. Corrigez avant de continuer.");
       let C={},motif="";
       try{
         const prev=await rest(`soumissions?select=coches,motif&enseignant_id=eq.${eid}&classe_code=eq.${encodeURIComponent(code)}&division=eq.${encodeURIComponent(dv)}&coches=not.is.null&order=semaine.desc&limit=1`);
         if(prev[0]&&prev[0].coches)C=prev[0].coches;
       }catch(e){}
-      composantCoches({mat:c.matiere,classe:code,coches:C,motif,el:$("#ck"),bouton:"Enregistrer (déjà validé)",
+      composantCoches({mat:c.matiere,classe:code,coches:C,motif,el:$("#ck"),bouton:"Enregistrer (déjà validé)",...(sw?{date:sw[2],dateFixe:true}:{}),
         onSave:async r=>{
           try{
             await rest("soumissions?on_conflict=enseignant_id,classe_code,division,semaine",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
