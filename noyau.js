@@ -213,7 +213,7 @@ function formDefaut(code){
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="38"
+const VERSION_SITE="39"
 const normDiv=s=>{const t=String(s||"").replace(/\s+/g,"").toUpperCase();return t};;
 const REF_MAT = {};
 function chargerScript(url){
@@ -433,14 +433,24 @@ async function dirCom(opt){
 
 /* ====== Accueil ====== */
 function accueil(){
+  const ic=(e,c)=>`<span class="ico" style="background:${c}">${e}</span>`;
+  const etp=(n,img,t,d)=>`<div class="etp"><div class="etn">${n}</div><div style="flex:1;min-width:0"><b>${t}</b><div class="mut" style="font-size:14px">${d}</div></div></div><img class="etimg" src="images/${img}" alt="${t}" loading="lazy" width="320">`;
   app.innerHTML=`
   <div class="card"><h2>Bienvenue</h2>
   <p class="mut">Plateforme gratuite de suivi de l'exécution des programmes – Département de la Donga.</p>
-  <button class="big b1" id="a-ens">👩‍🏫 Je suis enseignant<br><small>Envoyer mon point de la semaine</small></button>
-  <button class="big b2" id="a-ae">✅ AE, Censeur ou Directeur<br><small>Valider les points, suivre et gérer mon collège</small></button>
-  <button class="big b3" id="a-dir">🏛️ Direction Départementale<br><small>Tableaux de synthèse</small></button>
-  <button class="big b4" id="a-enc">🎓 CCIP, Conseiller pédagogique, Inspecteur<br><small>Consulter les points, publier (CCIP)</small></button>
-  </div>`;
+  <button class="big b1" id="a-ens">${ic("👩‍🏫","#1f4468")}<span><b>Je suis enseignant</b><small>Envoyer mon point de la semaine</small></span></button>
+  <button class="big b2" id="a-ae">${ic("✅","#3a416b")}<span><b>AE, Censeur ou Directeur</b><small>Valider les points, suivre et gérer mon collège</small></span></button>
+  <button class="big b3" id="a-dir">${ic("🏛️","#2c5a45")}<span><b>Direction Départementale</b><small>Tableaux de synthèse</small></span></button>
+  <button class="big b4" id="a-enc">${ic("🎓","#574a22")}<span><b>CCIP, Conseiller pédagogique, Inspecteur</b><small>Consulter les points, publier (CCIP)</small></span></button>
+  </div>
+  <div class="card"><h3>Envoyez votre point en 2 minutes</h3>
+  <p class="mut">Depuis votre téléphone : choisissez votre classe, cochez les notions traitées, le calcul se fait tout seul.</p>
+  <img class="etimg" src="images/apercu.jpg" alt="Écran de l'application sur téléphone" loading="lazy" width="320" style="max-width:300px"></div>
+  <div class="card"><h3>Comment ça marche</h3>
+  ${etp(1,"etape1.jpg","L'enseignant renseigne","Il coche les notions traitées. Prévu, réalisé et écart se calculent seuls, puis il envoie à son AE.")}
+  ${etp(2,"etape2.jpg","L'AE valide","Il contrôle les points de son collège, les valide, relance les retardataires et transmet le PDF à son Directeur.")}
+  ${etp(3,"etape3.jpg","La Direction reçoit","Elle suit tout le département : tableau de bord, alertes de retard et statistiques.")}
+  <p class="mut" style="font-size:12px;margin-top:10px">Images d'illustration avec des données d'exemple.</p></div>`;
   $("#a-ens").onclick=ensConnexion;$("#a-ae").onclick=()=>connexionRole("ae");$("#a-dir").onclick=()=>connexionRole("dir");$("#a-enc").onclick=()=>connexionRole("enc");
 }
 
