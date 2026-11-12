@@ -23,8 +23,8 @@ function ensEcran(){
   <label>1. Classe (niveau)</label><select id="cl">${cl.map(c=>`<option value="${c.code}">${esc(c.nom)}</option>`).join("")}</select>
   <div class="row"><div><label>2. Numéro de la classe</label><select id="dv">${Array.from({length:15},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join("")}</select></div>
   <div><label>3. Classe dans le formulaire de la Direction</label><select id="fc">${FORM_CLASSES.map(c=>`<option>${c}</option>`).join("")}</select></div></div>
-  <label>4. Ouvrez vos notions</label><button id="ouv">Ouvrir mes notions</button><button class="sec" id="sev">Statistiques des évaluations</button><div id="m"></div></div>
-  <div id="ck"></div><div id="sts"></div>
+  <label>4. Ouvrez vos notions</label><button id="ouv">Ouvrir mes notions</button><button class="sec" id="sev">Statistiques des évaluations</button><button class="sec" id="prg">Ma progression (courbes)</button><div id="m"></div></div>
+  <div id="hc"></div><div id="pg"></div><div id="ck"></div><div id="sts"></div>
   <div class="card"><h3>Communiqués de la Direction</h3><div id="coms"><p class="mut">Chargement…</p></div></div>
   <div class="card"><h3>À envoyer à mon AE</h3><div id="liste"></div>
   <button class="ok" id="env" disabled>Envoyer à mon AE</button><button class="sec" id="sort">Quitter</button><div id="m2"></div></div>`;
@@ -65,12 +65,14 @@ function ensEcran(){
       }});
     $("#ck").scrollIntoView();
   };
-  $("#sev").onclick=ensStats;
+  $("#sev").onclick=ensStats;$("#prg").onclick=ensProgression;fileMajEtat();fileEssayer();
   $("#env").onclick=async()=>{
     try{const r=await rpc("soumettre_point",{p_whatsapp:ENS.w,p_code:ENS.c,p_lignes:ENS.lignes},false);
       if(!r.ok)return note($("#m2"),r.message);
       ENS.lignes=[];rend();note($("#m2"),"Envoyé à votre AE ("+r.n+" classe(s)). Il le validera.","good");
-    }catch(e){note($("#m2"),e.message)}
+    }catch(e){
+      if(e.message==="Pas de connexion Internet"){fileAjouter(ENS.w,ENS.c,ENS.lignes);ENS.lignes=[];rend();fileMajEtat();note($("#m2"),"Pas de réseau : votre point est gardé sur ce téléphone et partira tout seul dès que la connexion revient. Ne désinstallez pas l'application.","good")}
+      else note($("#m2"),e.message)}
   };
 }
 

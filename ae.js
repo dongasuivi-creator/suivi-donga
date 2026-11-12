@@ -57,10 +57,11 @@ async function aeValider(){
     z.innerHTML=`<div class="card"><h3>Semaine ${s}</h3>
       <p class="mut">${att.length} à valider · ${rows.filter(r=>r.statut==="valide").length} validé(s) · ${sans.length} enseignant(s) sans point</p>
       ${att.length?'<button class="ok" id="tout">Tout valider ('+att.length+')</button>':""}
-      ${rows.length?'<div class="mut" style="margin-top:8px">Télécharger le point de la semaine :</div><button class="sec sm" id="dlx">Excel</button><button class="sec sm" id="dlp">PDF</button>':""}<div id="m"></div></div>
+      ${rows.length?'<div class="mut" style="margin-top:8px">Télécharger le point de la semaine :</div><button class="sec sm" id="dlx">Excel</button><button class="sec sm" id="dlp">PDF</button>':""}<div id="alr"></div><div id="m"></div></div>
       ${rows.map(carteSoum).join("")}
-      ${sans.length?`<div class="card"><h3>Sans point cette semaine</h3>${sans.map(e=>`<p>${esc(e.nom)} <button class="sec sm" data-saisir="${e.id}">Saisir pour lui</button> <a href="${lienWA(e.whatsapp,"Mr/Mme "+e.nom+", merci d'envoyer votre point de progression de la semaine "+s+" sur la plateforme : "+SITE_URL+"\nPensez à cocher aussi toutes les séquences déjà exécutées, pas seulement celles de cette semaine. Merci.")}" target="_blank" rel="noopener">Relancer</a></p>`).join("")}</div>`:""}`;
+      ${sans.length?`<div class="card"><h3>Sans point cette semaine</h3>${sans.map(e=>`<p>${esc(e.nom)} <span class="mut" data-der="${e.id}"></span><br><button class="sec sm" data-saisir="${e.id}">Saisir pour lui</button> <a href="${lienWA(e.whatsapp,"Mr/Mme "+e.nom+", merci d'envoyer votre point de progression de la semaine "+s+" sur la plateforme : "+SITE_URL+"\nPensez à cocher aussi toutes les séquences déjà exécutées, pas seulement celles de cette semaine. Merci.")}" target="_blank" rel="noopener">Relancer</a></p>`).join("")}</div>`:""}`;
     if($("#tout"))$("#tout").onclick=()=>majStatut(att.map(a=>a.id),"valide");
+    plusAE(c,s,rows,sans);
     if($("#dlx"))$("#dlx").onclick=()=>aePointExcel(rows,sans,s);
     if($("#dlp"))$("#dlp").onclick=()=>aePointPDF(rows,sans,s);
     z.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>majStatut([b.dataset.v],"valide"));
@@ -92,10 +93,10 @@ function carteSoum(r){
   const en=r.enseignants||{};
   return `<div class="card"><div class="row" style="align-items:center"><div style="flex:3"><b>${esc(en.nom)}</b><div class="mut">${esc(r.classe_formulaire)} ${esc(r.division)}${r.saisi_par==="ae"?" · saisi par l'AE":""}</div></div>
   <div style="flex:0 0 auto"><span class="tag t-${r.statut}">${STAT[r.statut]}</span></div></div>
-  <p>Réalisé <b>${r.taux_realise}%</b> / prévu ${r.taux_prevu}% · écart ${r.ecart>0?"+":""}${r.ecart} <span class="tag t-${r.etat}">${ETAT[r.etat]||""}</span></p>
+  <p>Réalisé <b>${r.taux_realise}%</b> / prévu ${r.taux_prevu}% · écart ${r.ecart>0?"+":""}${r.ecart} <span class="tag t-${r.etat}">${ETAT[r.etat]||""}</span>${tagAlerte(r)}</p>
   ${r.motif?`<p class="mut">Motif : ${esc(r.motif)}</p>`:""}
   <div id="ed-${r.id}"></div>
-  ${r.statut!=="valide"?`<button class="ok sm" data-v="${r.id}">Valider</button>`:""}<button class="sec sm" data-e="${r.id}">Corriger</button>${r.statut!=="rejete"?`<button class="ko sm" data-r="${r.id}">Rejeter</button>`:""}</div>`;
+  ${r.statut!=="valide"?`<button class="ok sm" data-v="${r.id}">Valider</button>`:""}<button class="sec sm" data-e="${r.id}">Corriger</button><button class="sec sm" data-crb="${r.id}" data-en="${r.enseignant_id}" data-cc="${esc(r.classe_code)}" data-dv="${esc(r.division)}">Courbe</button>${r.statut!=="rejete"?`<button class="ko sm" data-r="${r.id}">Rejeter</button>`:""}</div>`;
 }
 
 /* ---- Téléchargement du point de la semaine (collège + discipline de l'AE) ---- */
