@@ -13,14 +13,14 @@ async function dirDemarrer(){
 }
 function dirEcran(){
   app.innerHTML=`<div class="card"><div class="row" style="align-items:center"><div style="flex:3"><h2>Direction Départementale</h2><div class="mut">${esc(sess.email)}</div></div><button class="sec sm" id="q" style="flex:0 0 auto">Quitter</button></div></div>
-  <div class="tabs"><button data-t="points">Points validés</button><button data-t="stats">Statistiques</button><button data-t="mer">Enseignants méritants</button><button data-t="com">Communiqués</button><button data-t="cens">Censeurs</button><button data-t="aes">AE inscrits</button><button data-t="enc">Encadreurs</button><button data-t="col">Collèges</button><button data-t="adm">Administrateurs</button><button data-t="sau">Sauvegarde</button></div><div id="zone"></div>`;
+  <div class="tabs"><button data-t="points">Points validés</button><button data-t="stats">Statistiques</button><button data-t="mer">Enseignants méritants</button><button data-t="com">Communiqués</button><button data-t="ban">Bandeau</button><button data-t="cens">Censeurs</button><button data-t="aes">AE inscrits</button><button data-t="enc">Encadreurs</button><button data-t="col">Collèges</button><button data-t="adm">Administrateurs</button><button data-t="sau">Sauvegarde</button></div><div id="zone"></div>`;
   $("#q").onclick=deconnexion;
   document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{DIR.tab=b.dataset.t;dirOnglet()});
   dirOnglet();
 }
 function dirOnglet(){
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===DIR.tab));
-  ({points:dirPoints,com:dirCom,cens:dirCens,aes:dirAes,enc:dirEnc,col:dirCol,adm:dirAdm,sau:dirSauv,stats:dirStats,mer:dirMerite})[DIR.tab]();
+  ({points:dirPoints,com:dirCom,cens:dirCens,aes:dirAes,enc:dirEnc,col:dirCol,adm:dirAdm,sau:dirSauv,stats:dirStats,mer:dirMerite,ban:dirBandeau})[DIR.tab]();
 }
 async function dirPoints(){
   const z=$("#zone");
