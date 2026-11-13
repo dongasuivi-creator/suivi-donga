@@ -19,7 +19,7 @@ function aeEcran(){
   const tabs=[];
   if(AE.aff.length)tabs.push(["valider","À valider"],["saisir","Saisir pour un collègue"],["ens","Enseignants"],["stats","Statistiques"]);
   if(AE.cens.some(x=>x.role==="DIRECTEUR"))tabs.push(["suivi","Suivi du collège"]);
-  if(AE.cens.length)tabs.push(["cstats","Stats du collège"],["merite","Enseignants méritants"]);
+  if(AE.cens.length)tabs.push(["synth","Synthèse mensuelle"],["cstats","Stats du collège"],["merite","Enseignants méritants"]);
   if(AE.cens.length)tabs.push(["aes",AE.cens.some(x=>x.role==="DIRECTEUR")?"AE et censeurs":"AE du collège"]);
   tabs.push(["com","Communiqués"]);
   if(!tabs.some(t=>t[0]===AE.tab))AE.tab=tabs[0][0];
@@ -39,7 +39,7 @@ function aeEcran(){
 function aeOnglet(){
   { const l=$("#lsem");if(l)l.textContent=AE.tab==="saisir"?"1. Semaine n° (puis touchez Afficher)":"Semaine n°"; }
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===AE.tab));
-  ({valider:aeValider,saisir:aeSaisir,ens:aeEns,aes:censAE,suivi:dirSuivi,stats:aeStats,cstats:censStats,merite:merCollege,com:aeCom})[AE.tab]();
+  ({valider:aeValider,saisir:aeSaisir,ens:aeEns,aes:censAE,suivi:dirSuivi,stats:aeStats,cstats:censStats,merite:merCollege,synth:censSynthese,com:aeCom})[AE.tab]();
 }
 const semAE=()=>{const s=parseInt(AE.sem,10);return s>=1&&s<=45?s:null};
 async function aeValider(){

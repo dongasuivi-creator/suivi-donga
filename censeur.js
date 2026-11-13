@@ -81,6 +81,7 @@ async function dirSuivi(){
         <p>Enseignants : ${d.nbE} · ont envoyé : ${d.env} · validés : ${d.val} · à valider : ${d.att}</p>
         ${d.sans.length?`<p class="mut">Sans point : ${d.sans.map(esc).join(", ")}</p>`:""}
         ${pb?d.ae.filter(x=>x.whatsapp).map(x=>`<a href="${lienWA(x.whatsapp,msgAE(x,d))}" target="_blank" rel="noopener"><button class="ok sm">Relancer ${esc(x.nom||"l'AE")} (WhatsApp)</button></a>`).join("")+(d.ae.some(x=>x.whatsapp)?"":'<p class="mut">Aucun numéro WhatsApp d\'AE enregistré.</p>'):""}</div>`}).join("")||'<div class="msg info">Aucune discipline enregistrée pour ce collège.</div>'}`;
+    plusSuiviAlertes(zz,sou);
     if($("#dsx"))$("#dsx").onclick=()=>dirSuiviExcel(et,s,sou,D);
     if($("#dsp"))$("#dsp").onclick=()=>dirSuiviPDF(et,s,sou,D);
   }catch(e){zz.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
