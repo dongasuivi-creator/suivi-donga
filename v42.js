@@ -3,7 +3,7 @@ const COLLEGES_OFFICIELS=[["Bassila", "CEG AKPAO-OGOU"], ["Bassila", "CEG ALEDJO
 
 const normNom=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ").trim().toUpperCase();
 const GUIDES={ens:["Guide-Enseignant-Mon-point-de-la-semaine.pdf","Guide de l'enseignant"],ae:["Guide-AE-Point-de-la-semaine.pdf","Guide de l'AE"],cens:["Guide-Censeurs-Directeurs-Smartphone.pdf","Guide du censeur et du directeur"]};
-const blocGuide=k=>`<a href="guides/${GUIDES[k][0]}" target="_blank" rel="noopener" download><button class="sec sm" type="button">📘 Télécharger : ${GUIDES[k][1]}</button></a>`;
+const blocGuide=k=>`<a href="guides/${GUIDES[k][0]}" target="_blank" rel="noopener" download><button class="sec sm" type="button">📘 Télécharger : ${GUIDES[k][1]}</button></a><div id="grp"></div>`;
 const blocSemaine=()=>{const n=+semCourante(),p=(typeof periodeSemaine==="function"?String(periodeSemaine(n)||""):"").replace(/^Semaine\s+/i,"");return `<div class="semb"><span>Semaine en cours</span><b>Semaine ${n}</b>${p?`<small>${esc(p)}</small>`:""}${typeof themeSemaine==="function"&&themeSemaine(n)?`<div class="theme">Thème : ${esc(themeSemaine(n))}</div>`:""}</div>`};
 
 /* ---- Niveaux de couleur des classes (AE) ---- */
