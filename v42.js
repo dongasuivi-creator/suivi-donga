@@ -3,7 +3,7 @@ const COLLEGES_OFFICIELS=[["Bassila", "CEG AKPAO-OGOU"], ["Bassila", "CEG ALEDJO
 
 const normNom=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ").trim().toUpperCase();
 const GUIDES={ens:["Guide-Enseignant-Mon-point-de-la-semaine.pdf","Guide de l'enseignant"],ae:["Guide-AE-Point-de-la-semaine.pdf","Guide de l'AE"],cens:["Guide-Censeurs-Directeurs-Smartphone.pdf","Guide du censeur et du directeur"]};
-const blocGuide=k=>`<a href="guides/${GUIDES[k][0]}" target="_blank" rel="noopener" download><button class="sec sm" type="button">📘 Télécharger : ${GUIDES[k][1]}</button></a><div id="grp"></div>`;
+const blocGuide=k=>`<a href="guides/${GUIDES[k][0]}" target="_blank" rel="noopener" download><button class="sec sm" type="button">📘 Télécharger : ${GUIDES[k][1]}</button></a><button class="sec sm" type="button" data-tour="${k}">🧭 Visite guidée</button><div id="grp"></div>`;
 const blocSemaine=()=>{const n=+semCourante(),per=k=>(typeof periodeSemaine==="function"?String(periodeSemaine(k)||""):"").replace(/^Semaine\s+/i,"");
   const w=SEMAINES_REF.find(x=>x[0]===n),auj=aujourdhui();
   const fin=w?new Date(new Date(w[2]+"T00:00:00Z").getTime()+2*864e5).toISOString().slice(0,10):"";
