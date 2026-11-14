@@ -58,7 +58,7 @@ async function plusAE(c,s,rows,sans){
 /* ---- Enseignant : ma progression ---- */
 async function ensProgression(){
   const z=document.getElementById("pg");z.innerHTML="<p class='mut'>Chargement…</p>";
-  try{const r=await rpc("mon_historique",{p_whatsapp:ENS.w,p_code:ENS.c},false);
+  try{const r=await rpc("mon_historique",{p_whatsapp:ensCle(),p_code:ENS.c},false);
     if(!r.ok)throw new Error(r.message);z.innerHTML=groupeCourbes(r.lignes);z.scrollIntoView()}
   catch(e){z.innerHTML='<div class="msg err">'+esc(e.message)+(String(e.message).includes("mon_historique")?" (mise à jour du serveur à faire)":"")+'</div>'}
 }

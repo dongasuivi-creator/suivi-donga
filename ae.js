@@ -25,6 +25,7 @@ function aeEcran(){
   if(!tabs.some(t=>t[0]===AE.tab))AE.tab=tabs[0][0];
   app.innerHTML=`<div class="card"><div class="row" style="align-items:center"><div style="flex:3"><h2>${c?"AE "+esc(c.matiere):(AE.cens.some(x=>x.role==="DIRECTEUR")?"Directeur":"Censeur")}</h2><div class="mut">${esc(c?c.etablissements.nom:AE.cens[0].etablissements.nom)} · ${esc(sess.email)}</div></div>
   <button class="sec sm" id="q" style="flex:0 0 auto">Quitter</button></div>
+  ${blocSemaine()}${blocGuide(c?"ae":"cens")}
   ${AE.aff.length>1?`<label>Discipline / collège</label><select id="sa">${AE.aff.map((a,i)=>`<option value="${i}" ${a.id===c.id?"selected":""}>${esc(a.matiere)} – ${esc(a.etablissements.nom)}</option>`).join("")}</select>`:""}
   ${c?`<label id="lsem">Semaine n°</label><div class="row"><input id="sem" inputmode="numeric" value="${esc(AE.sem)}" style="flex:2"><button id="oksem" class="sec" style="margin:0">Afficher</button></div>`:""}</div>
   <div class="tabs">${tabs.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join("")}</div>
@@ -57,11 +58,11 @@ async function aeValider(){
     z.innerHTML=`<div class="card"><h3>Semaine ${s}</h3>
       <p class="mut">${att.length} à valider · ${rows.filter(r=>r.statut==="valide").length} validé(s) · ${sans.length} enseignant(s) sans point</p>
       ${att.length?'<button class="ok" id="tout">Tout valider ('+att.length+')</button>':""}
-      ${rows.length?'<div class="mut" style="margin-top:8px">Télécharger le point de la semaine :</div><button class="sec sm" id="dlx">Excel</button><button class="sec sm" id="dlp">PDF</button>':""}<div id="alr"></div><div id="m"></div></div>
+      ${rows.length?'<div class="mut" style="margin-top:8px">Télécharger le point de la semaine :</div><button class="sec sm" id="dlx">Excel</button><button class="sec sm" id="dlp">PDF</button>':""}<div id="alr"></div><div id="niv"></div><div id="m"></div></div>
       ${rows.map(carteSoum).join("")}
       ${sans.length?`<div class="card"><h3>Sans point cette semaine</h3>${sans.map(e=>`<p>${esc(e.nom)} <span class="mut" data-der="${e.id}"></span><br><button class="sec sm" data-saisir="${e.id}">Saisir pour lui</button> <a href="${lienWA(e.whatsapp,"Mr/Mme "+e.nom+", merci d'envoyer votre point de progression de la semaine "+s+" sur la plateforme : "+SITE_URL+"\nPensez à cocher aussi toutes les séquences déjà exécutées, pas seulement celles de cette semaine. Merci.")}" target="_blank" rel="noopener">Relancer</a></p>`).join("")}</div>`:""}`;
     if($("#tout"))$("#tout").onclick=()=>majStatut(att.map(a=>a.id),"valide");
-    plusAE(c,s,rows,sans);
+    plusAE(c,s,rows,sans);plusNiveaux(rows,sans);
     if($("#dlx"))$("#dlx").onclick=()=>aePointExcel(rows,sans,s);
     if($("#dlp"))$("#dlp").onclick=()=>aePointPDF(rows,sans,s);
     z.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>majStatut([b.dataset.v],"valide"));
@@ -91,7 +92,7 @@ async function aeValider(){
 }
 function carteSoum(r){
   const en=r.enseignants||{};
-  return `<div class="card"><div class="row" style="align-items:center"><div style="flex:3"><b>${esc(en.nom)}</b><div class="mut">${esc(r.classe_formulaire)} ${esc(r.division)}${r.saisi_par==="ae"?" · saisi par l'AE":""}</div></div>
+  return `<div class="card ${clsNiveau(r)}"><div class="row" style="align-items:center"><div style="flex:3"><b>${esc(en.nom)}</b><div class="mut">${esc(r.classe_formulaire)} ${esc(r.division)}${r.saisi_par==="ae"?" · saisi par l'AE":""}</div></div>
   <div style="flex:0 0 auto"><span class="tag t-${r.statut}">${STAT[r.statut]}</span></div></div>
   <p>Réalisé <b>${r.taux_realise}%</b> / prévu ${r.taux_prevu}% · écart ${r.ecart>0?"+":""}${r.ecart} <span class="tag t-${r.etat}">${ETAT[r.etat]||""}</span>${tagAlerte(r)}</p>
   ${r.motif?`<p class="mut">Motif : ${esc(r.motif)}</p>`:""}
@@ -212,6 +213,10 @@ async function aeEns(){
 async function donnerCode(id,nom,w,nouveau){
   const code=String(Math.floor(100000+Math.random()*900000));
   try{
+    if(nouveau){
+      let cp=null;try{cp=await rpc("copier_code",{p_ens:id})}catch(e){}
+      if(cp&&cp.ok&&cp.copie){await aeEns();const m=$("#m");if(m)m.innerHTML=`<div class="msg good">${esc(nom)} a déjà un code (celui de ses autres collèges ou disciplines). Il utilisera <b>le même code</b> : il n'y a rien à lui envoyer, il choisira le collège après sa connexion.</div>`;return}
+    }
     await rpc("definir_code",{p_ens:id,p_code:code});
     const txt=`Bonjour ${nom}, voici votre accès à la plateforme de suivi de progression (Donga) : numéro ${w}, code personnel ${code}. Ne le partagez pas.`;
     const html=`<div class="msg good">Code de ${esc(nom)} : <b style="font-size:20px">${code}</b><br>Notez-le ou envoyez-le maintenant (il ne sera plus affiché).<br><a href="${lienWA(w,txt)}" target="_blank" rel="noopener"><button class="ok sm">Envoyer par WhatsApp</button></a></div>`;

@@ -139,7 +139,7 @@ async function ensStats(){
   const code=$("#cl").value,dv=normDiv($("#dv").value),fc=$("#fc").value,box=$("#sts");
   if(!classeCoherente(code,fc))return note($("#m"),"Incohérence : le niveau choisi ne correspond pas à la classe du formulaire. Corrigez.");
   const nomCl=(listeClasses(ENS.matiere).find(c=>c.code===code)||{}).nom||code;
-  let ex=[];try{const r=await rpc("mes_stats",{p_whatsapp:ENS.w,p_code:ENS.c},false);if(r.ok)ex=r.rows}catch(e){}
+  let ex=[];try{const r=await rpc("mes_stats",{p_whatsapp:ensCle(),p_code:ENS.c},false);if(r.ok)ex=r.rows}catch(e){}
   box.innerHTML=`<div class="card"><h3>Statistiques des évaluations</h3><p class="mut">${esc(nomCl)} ${esc(dv)}</p>
   <label>Semestre</label><select id="ss"><option value="1">Semestre 1</option><option value="2">Semestre 2</option></select><div id="sf"></div>
   <button class="ok" id="se">Enregistrer et envoyer à mon AE</button><button class="sec" id="sfer">Fermer</button><div id="sm"></div></div>`;
@@ -184,7 +184,7 @@ async function ensStats(){
       lignes.push(o);
     }
     if(!lignes.length)return note(m,"Rien de nouveau à envoyer.");
-    try{const r=await rpc("soumettre_stats",{p_whatsapp:ENS.w,p_code:ENS.c,p_lignes:lignes},false);
+    try{const r=await rpc("soumettre_stats",{p_whatsapp:ensCle(),p_code:ENS.c,p_lignes:lignes},false);
       if(!r.ok)return note(m,r.message);
       lignes.forEach(l=>{ex=ex.filter(x=>!(x.classe_code===l.classe_code&&x.division===l.division&&x.semestre===l.semestre&&x.type_eval===l.type_eval));ex.push({...l,statut:"en_attente"})});
       rend();note($("#sm"),"Envoyé à votre AE ("+r.n+" évaluation(s)). Il le validera.","good");

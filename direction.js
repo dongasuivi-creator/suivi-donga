@@ -129,26 +129,29 @@ async function dirCens(){
 async function dirAes(){
   const z=$("#zone");z.innerHTML='<div class="card">Chargement…</div>';
   try{
-    const SEL="affectations?select=id,nom,email,whatsapp,matiere,etablissements(nom)&order=matiere";
+    const SEL="affectations?select=id,nom,email,whatsapp,matiere,etablissements(nom,commune)&order=matiere";
     let a=await rest(SEL);
     z.innerHTML=`<div class="card"><h3>Ajouter des AE en lot</h3>
     <p class="mut">Une ligne par AE : <b>e-mail ; nom ; collège ; discipline ; numéro WhatsApp ; commune</b> (la commune est facultative : Djougou, Bassila, Copargo ou Ouaké). Collez directement des lignes copiées depuis Excel, ou choisissez un fichier CSV ou texte. Le collège est créé s'il n'existe pas encore.</p>
     <textarea id="t" rows="6" placeholder="ae1@gmail.com ; KOFFI Jean ; CEG Barei ; Mathématiques ; 01 97 89 09 52&#10;ae2@gmail.com ; ADJO Marie ; CEG Djougou 1 ; PCT ; 01 90 00 00 00"></textarea>
     <label>Ou choisir un fichier (.csv, .txt)</label><input type="file" id="fi" accept=".csv,.txt,text/csv,text/plain">
     <button id="ad">Enregistrer les AE</button><div id="m"></div></div>
-    <div class="card"><h3>AE inscrits <span id="cnt"></span></h3><input id="fq" placeholder="Rechercher (nom, collège, discipline, e-mail)"><div id="lst"></div></div>`;
+    <div class="card"><h3>AE inscrits <span id="cnt"></span></h3><input id="fq" placeholder="Rechercher (nom, collège, discipline, e-mail)"><div class="row"><div><label>Commune</label><select id="f-com"></select></div><div><label>Discipline</label><select id="f-mat"></select></div></div><label>Collège</label><select id="f-col"></select><button class="sec sm" id="f-raz" type="button">Effacer les filtres</button><div id="lst"></div></div>`;
+    const opts=(id,vals,tout)=>{const cur=$(id).value;$(id).innerHTML=`<option value="">${tout}</option>`+[...new Set(vals.filter(Boolean))].sort((p,q)=>p.localeCompare(q)).map(v=>`<option>${esc(v)}</option>`).join("");$(id).value=cur};
     const rend=()=>{
-      const q=($("#fq").value||"").toLowerCase();
-      const f=a.filter(x=>!q||[x.nom,x.email,x.matiere,NOM_MAT[x.matiere],x.etablissements.nom].join(" ").toLowerCase().includes(q));
-      $("#cnt").textContent="("+(q?f.length+" sur "+a.length:a.length)+")";
+      const q=($("#fq").value||"").toLowerCase(),fc=$("#f-com").value,fm=$("#f-mat").value,fl=$("#f-col").value;
+      const f=a.filter(x=>(!q||[x.nom,x.email,x.matiere,NOM_MAT[x.matiere],x.etablissements.nom].join(" ").toLowerCase().includes(q))&&(!fc||x.etablissements.commune===fc)&&(!fm||(NOM_MAT[x.matiere]||x.matiere)===fm)&&(!fl||x.etablissements.nom===fl));
+      $("#cnt").textContent="("+(f.length!==a.length?f.length+" sur "+a.length:a.length)+")";
       $("#lst").innerHTML=f.map(x=>`<p style="border-top:1px solid var(--br);padding-top:6px"><b>${esc(x.nom||"")}</b> <span class="mut">${esc(x.email)}${x.whatsapp?" · "+esc(x.whatsapp):""}</span><br>${esc(NOM_MAT[x.matiere]||x.matiere)} – ${esc(x.etablissements.nom)} <button class="ko sm" data-d="${x.id}">Retirer</button></p>`).join("")||'<p class="mut">Aucun AE.</p>';
       $("#lst").querySelectorAll("[data-d]").forEach(b=>b.onclick=async()=>{
         if(!confirm("Retirer cet AE ?"))return;
         try{await rest("affectations?id=eq."+b.dataset.d,{method:"DELETE",headers:{Prefer:"return=minimal"}});a=await rest(SEL);rend()}catch(e){note($("#m"),e.message)}
       });
     };
+    opts("#f-com",a.map(x=>x.etablissements.commune),"Toutes");opts("#f-mat",a.map(x=>NOM_MAT[x.matiere]||x.matiere),"Toutes");opts("#f-col",a.map(x=>x.etablissements.nom),"Tous les collèges");
     rend();
-    $("#fq").oninput=rend;
+    $("#fq").oninput=rend;["#f-com","#f-mat","#f-col"].forEach(i=>$(i).onchange=rend);
+    $("#f-raz").onclick=()=>{$("#fq").value="";["#f-com","#f-mat","#f-col"].forEach(i=>$(i).value="");rend()};
     $("#fi").onchange=e=>{
       const f=e.target.files[0];if(!f)return;
       const r=new FileReader();
@@ -273,34 +276,6 @@ async function dirEnc(){
 
 /* Collèges et communes (la commune détermine le périmètre des CP) */
 const COMMUNES=["Djougou","Bassila","Copargo","Ouaké"];
-async function dirCol(){
-  const z=$("#zone");z.innerHTML='<div class="card">Chargement…</div>';
-  try{
-    let a=await rest("etablissements?select=id,nom,commune&order=nom");
-    z.innerHTML=`<div class="card"><h3>Collèges et communes <span id="cnt"></span></h3>
-    <p class="mut">Indiquez la commune de chaque collège : elle détermine ce que voit chaque Conseiller Pédagogique. Le changement est enregistré dès que vous choisissez.</p>
-    <label><input type="checkbox" id="sc" style="width:auto"> Afficher seulement les collèges sans commune</label>
-    <input id="fq" placeholder="Rechercher un collège"><div id="lst"></div><div id="m"></div></div>`;
-    const rend=()=>{
-      const q=($("#fq").value||"").toLowerCase(),sc=$("#sc").checked;
-      const f=a.filter(x=>(!q||x.nom.toLowerCase().includes(q))&&(!sc||!x.commune));
-      const sans=a.filter(x=>!x.commune).length;
-      $("#cnt").textContent="("+a.length+" collèges, "+sans+" sans commune)";
-      $("#lst").innerHTML=f.map(x=>`<p style="border-top:1px solid var(--br);padding-top:6px"><b>${esc(x.nom)}</b><br><select data-c="${x.id}"><option value="">— commune non renseignée —</option>${COMMUNES.map(c=>`<option${x.commune===c?" selected":""}>${c}</option>`).join("")}</select></p>`).join("")||'<p class="mut">Aucun collège.</p>';
-      $("#lst").querySelectorAll("[data-c]").forEach(s=>s.onchange=async()=>{
-        try{
-          await rest("etablissements?id=eq."+s.dataset.c,{method:"PATCH",headers:{Prefer:"return=minimal"},body:{commune:s.value||null}});
-          const e=a.find(x=>x.id===s.dataset.c);if(e)e.commune=s.value||null;
-          note($("#m"),"Enregistré","good");$("#cnt").textContent="("+a.length+" collèges, "+a.filter(x=>!x.commune).length+" sans commune)";
-        }catch(er){note($("#m"),er.message)}
-      });
-    };
-    rend();$("#fq").oninput=rend;$("#sc").onchange=rend;
-  }catch(e){z.innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
-}
-
-
-/* ====== Sauvegarde et restauration (Direction) ====== */
 const SAUV_TABLES=["etablissements","direction_users","affectations","enseignants","soumissions","stats_evaluations","notations_enseignants","demandes_ae","censeurs","communiques","communique_pdf","parametres","encadreurs"];
 const SAUV_TITRE={etablissements:"Collèges",direction_users:"Administrateurs",affectations:"AE",enseignants:"Enseignants",soumissions:"Points",stats_evaluations:"Statistiques des évaluations",notations_enseignants:"Enseignants méritants",demandes_ae:"Demandes AE",censeurs:"Censeurs et directeurs",communiques:"Communiqués",communique_pdf:"PDF des communiqués",parametres:"Paramètres",encadreurs:"Encadreurs"};
 async function sauvLire(t,depuis,jusqua,secret){

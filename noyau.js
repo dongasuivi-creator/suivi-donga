@@ -213,7 +213,7 @@ function formDefaut(code){
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="41"
+const VERSION_SITE="42"
 const normDiv=s=>{const t=String(s||"").replace(/\s+/g,"").toUpperCase();return t};;
 const REF_MAT = {};
 function chargerScript(url){
@@ -303,7 +303,7 @@ function composantCoches(o){
     $("#ckp").textContent=fmtNb(prev)+"%";$("#ckr").textContent=fmtNb(real)+"%";
     $("#cke").textContent=(ev.ecart>0?"+":ev.ecart<0?"−":"")+fmtNb(ev.ecart);
     $("#cksem").textContent="S"+cur.sem+" ("+ddmm(wk.debut)+" – "+ddmm(wk.fin)+")";
-    const a=$("#cka");a.className="msg "+(ev.statut==="retard"?"err":ev.statut==="avance"?"info":"good");a.textContent=messageEcart(ev.statut,ev.ecart,vol);
+    const a=$("#cka");a.className="msg "+(ev.statut==="retard"?"err":ev.statut==="avance"?"info":"good");a.innerHTML=esc(messageEcart(ev.statut,ev.ecart,vol))+(typeof encourager==="function"&&encourager(ev)?"<br>"+esc(encourager(ev)):"");
     cours.forEach(s=>{
       const n=nb(s.id),r=sais[s.id];
       $("#sm-"+s.id).innerHTML="S"+s.id.replace(/^S0?/,"")+" · "+ddmm(s.debut)+" – "+ddmm(s.fin)+" · "+n+"/"+s.items.length+(r!=null?" · "+fmtNb(r)+"%":"")+(s.id===wk.id?' <span class="actif">← en cours</span>':"");
