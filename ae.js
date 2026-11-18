@@ -69,10 +69,11 @@ async function aeValider(){
     z.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>majStatut([b.dataset.r],"rejete"));
     z.querySelectorAll("[data-e]").forEach(b=>b.onclick=async()=>{
       const r=rows.find(x=>x.id===b.dataset.e);const box=$("#ed-"+r.id);await chargerMat(r.matiere);
+      await nbgCharger("ae");const dx=document.getElementById("dvx-"+r.id);if(dx)dx.remove();box.insertAdjacentHTML("beforebegin",dvEditeur(r));
       if(r.coches&&REF_MAT[r.matiere]){
         composantCoches({mat:r.matiere,classe:r.classe_code,coches:r.coches,date:r.date_situation,dateFixe:true,motif:r.motif,el:box,bouton:"Enregistrer et valider",
           onSave:async x=>{
-            try{await rest("soumissions?id=eq."+r.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:{taux_prevu:x.prevu,taux_realise:x.realise,ecart:x.ecart,etat:x.etat,motif:x.motif,coches:x.coches,statut:"valide"}});aeValider()}
+            try{await dvAppliquer(r);await rest("soumissions?id=eq."+r.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:{taux_prevu:x.prevu,taux_realise:x.realise,ecart:x.ecart,etat:x.etat,motif:x.motif,coches:x.coches,statut:"valide"}});aeValider()}
             catch(e){note($("#ckm"),e.message)}
           }});
         return;
@@ -83,7 +84,7 @@ async function aeValider(){
         const pv=num($("#p-"+r.id).value),rl=num($("#r-"+r.id).value),mo=$("#mo-"+r.id).value.trim();
         if(pv==null||rl==null||pv<0||pv>100||rl<0||rl>100)return note($("#m"),"Taux entre 0 et 100");
         const et=evaluerStatut(pv,rl);if((et.statut==="retard"||et.statut==="non_commence")&&!mo)return note($("#m"),"Motif obligatoire en cas de retard");
-        try{await rest("soumissions?id=eq."+r.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:{taux_prevu:pv,taux_realise:rl,ecart:et.ecart,etat:et.statut,motif:mo,statut:"valide"}});aeValider()}
+        try{await dvAppliquer(r);await rest("soumissions?id=eq."+r.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:{taux_prevu:pv,taux_realise:rl,ecart:et.ecart,etat:et.statut,motif:mo,statut:"valide"}});aeValider()}
         catch(e){note($("#m"),e.message)}
       };
     });
