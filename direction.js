@@ -276,14 +276,15 @@ async function dirEnc(){
 
 /* Collèges et communes (la commune détermine le périmètre des CP) */
 const COMMUNES=["Djougou","Bassila","Copargo","Ouaké"];
-const SAUV_TABLES=["etablissements","direction_users","affectations","enseignants","soumissions","stats_evaluations","notations_enseignants","demandes_ae","censeurs","communiques","communique_pdf","parametres","encadreurs","groupes_discipline"];
-const SAUV_TITRE={groupes_discipline:"Groupes WhatsApp",etablissements:"Collèges",direction_users:"Administrateurs",affectations:"AE",enseignants:"Enseignants",soumissions:"Points",stats_evaluations:"Statistiques des évaluations",notations_enseignants:"Enseignants méritants",demandes_ae:"Demandes AE",censeurs:"Censeurs et directeurs",communiques:"Communiqués",communique_pdf:"PDF des communiqués",parametres:"Paramètres",encadreurs:"Encadreurs"};
+const SAUV_TABLES=["etablissements","direction_users","affectations","enseignants","soumissions","stats_evaluations","notations_enseignants","demandes_ae","censeurs","communiques","communique_pdf","parametres","encadreurs","groupes_discipline","groupes_pedagogiques"];
+const SAUV_TITRE={groupes_discipline:"Groupes WhatsApp",groupes_pedagogiques:"Groupes pédagogiques",etablissements:"Collèges",direction_users:"Administrateurs",affectations:"AE",enseignants:"Enseignants",soumissions:"Points",stats_evaluations:"Statistiques des évaluations",notations_enseignants:"Enseignants méritants",demandes_ae:"Demandes AE",censeurs:"Censeurs et directeurs",communiques:"Communiqués",communique_pdf:"PDF des communiqués",parametres:"Paramètres",encadreurs:"Encadreurs"};
 async function sauvLire(t,depuis,jusqua,secret){
   const taille=t==="communique_pdf"?10:500;let tout=[],off=0;
   for(;;){
     let r;
     try{r=await rpc("sauvegarde_table",{p_table:t,p_depuis:depuis||null,p_jusqua:jusqua||null,p_decalage:off,p_taille:taille,p_secret:!!secret})}
-    catch(e){if(/does not exist|n'existe pas/i.test(String(e.message))){window.SAUV_MANQUE=(window.SAUV_MANQUE||[]).concat(t);return []}throw e}
+    catch(e){if(/does not exist|n'existe pas/i.test(String(e.message))){window.SAUV_MANQUE=(window.SAUV_MANQUE||[]).concat(t);return []}
+      if(/^groupes_/.test(t)&&/non autoris/i.test(String(e.message))){window.SAUV_ANCIENNE=true;return []}throw e}
     tout=tout.concat(r||[]);if(!r||r.length<taille)break;off+=taille;
   }
   return tout;
