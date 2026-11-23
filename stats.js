@@ -98,11 +98,11 @@ async function statVue(opt){
       ${opt.maj&&att.length?`<button class="ok" id="stout">Tout valider (${att.length})</button>`:""}
       ${val.length?`<button class="sec sm" id="sdx">Télécharger en Excel</button><button class="sec sm" id="sdp">PDF</button>`:""}<div id="sm"></div></div>
       ${G.length?`<div class="card"><h3>Synthèse</h3><div class="scroll">${statTableSynth(opt.maj?f:val)}</div></div>`:'<div class="card"><p class="mut">Aucune statistique pour ce semestre.</p></div>'}
-      ${G.length>40&&!opt.maj?'<div class="card"><p class="mut">Beaucoup de classes : choisissez une commune, un collège ou une discipline pour voir le détail par classe.</p></div>':G.map(g=>{
+      ${G.length>40&&!opt.maj?'<div class="card"><p class="mut">Beaucoup de classes : choisissez une commune, un collège ou une discipline pour voir le détail par classe.</p></div>':G.map((g,gi)=>{
         const ids=EVALS.map(e=>g.evals[e[0]]).filter(r=>r&&r.statut==="en_attente").map(r=>r.id);
         return `<div class="card"><b>${esc(g.classe)} ${esc(g.div)}</b> <span class="mut">· ${esc(g.etab)} · ${esc(NOM_MAT[g.matiere]||g.matiere)} · ${esc(g.ens)}</span>
-        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px">${EVALS.filter(e=>g.evals[e[0]]).map(e=>{const r=g.evals[e[0]];return `<div>${statTableau(r)}${opt.maj?`<span class="tag">${ETQ[r.statut]||""}</span>`:""}</div>`}).join("")}</div>
-        ${opt.maj&&ids.length?`<button class="ok sm" data-v="${ids.join(",")}">Valider</button><button class="ko sm" data-r="${ids.join(",")}">Rejeter</button>`:""}</div>`}).join("")}`;
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px">${EVALS.filter(e=>g.evals[e[0]]).map(e=>{const r=g.evals[e[0]];return `<div>${statTableau(r)}${opt.maj?`<span class="tag">${ETQ[r.statut]||""}</span>`:""}${r.modifie_le?` <span class="tag" style="background:#fff4e0;color:#8a5a00">✏️ modifié par l'AE le ${String(r.modifie_le).slice(8,10)}/${String(r.modifie_le).slice(5,7)}</span>`:""}</div>`}).join("")}</div>
+        ${opt.maj&&ids.length?`<button class="ok sm" data-v="${ids.join(",")}">Valider</button><button class="ko sm" data-r="${ids.join(",")}">Rejeter</button>`:""}${opt.maj?`<button class="sec sm" data-ed="${gi}">✏️ Modifier</button>`:""}</div>`}).join("")}`;
     $("#ssem").onchange=e=>{sem=+e.target.value;charge()};
     if($("#fc"))$("#fc").onchange=e=>{F.c=e.target.value;rend()};
     if($("#fe"))$("#fe").onchange=e=>{F.e=e.target.value;rend()};
@@ -110,6 +110,7 @@ async function statVue(opt){
     if($("#sdx"))$("#sdx").onclick=()=>statExcel(f,sem,F.e||F.c||opt.portee);
     if($("#sdp"))$("#sdp").onclick=()=>statPDF(f,sem,F.e||F.c||opt.portee);
     const maj=async(ids,st)=>{try{await opt.maj(ids,st);await charge()}catch(e){note($("#sm"),e.message)}};
+    z.querySelectorAll("[data-ed]").forEach(b=>b.onclick=()=>statEditer(G[+b.dataset.ed],()=>charge()));
     if($("#stout"))$("#stout").onclick=()=>maj(att.map(a=>a.id),"valide");
     z.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>maj(b.dataset.v.split(","),"valide"));
     z.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>maj(b.dataset.r.split(","),"rejete"));
