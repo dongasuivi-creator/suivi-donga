@@ -8,8 +8,8 @@ async function ctcCharger(){
 const ctcCle=(e,m)=>String(e||"")+"|"+String(m||"");
 function ctcLiens(x,txt,sujet){
   const o=[];
-  if(x.whatsapp&&tel(x.whatsapp))o.push(`<a class="ctc-b" href="${lienWA(x.whatsapp,txt)}" target="_blank" rel="noopener" title="WhatsApp ${esc(x.nom||"")}">💬 WhatsApp</a>`);
-  if(x.email)o.push(`<a class="ctc-b" href="mailto:${encodeURIComponent(x.email).replace(/%40/g,"@")}?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(txt)}" title="E-mail ${esc(x.nom||"")}">✉️ E-mail</a>`);
+  if(x.whatsapp&&tel(x.whatsapp))o.push(`<a class="ctc-b ctc-wa" href="${lienWA(x.whatsapp,txt)}" target="_blank" rel="noopener" title="WhatsApp ${esc(x.nom||"")}">💬 WhatsApp</a>`);
+  if(x.email)o.push(`<a class="ctc-b ctc-ml" href="mailto:${encodeURIComponent(x.email).replace(/%40/g,"@")}?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(txt)}" title="E-mail ${esc(x.nom||"")}">✉️ E-mail</a>`);
   return o.join(" ")||'<span class="mut">Pas de contact</span>';
 }
 /* Remplit les cellules <td class="ctc" data-e="collège" data-m="discipline"> d'un tableau Détail.
@@ -31,4 +31,4 @@ async function ctcRemplir(zone,auteur,sem){
     }).join("");
   });
 }
-(function(){const s=document.createElement("style");s.textContent=".ctc-b{display:inline-block;margin:2px 6px 2px 0;padding:3px 8px;border:1px solid var(--br,#ccc);border-radius:14px;font-size:12px;text-decoration:none;white-space:nowrap}.ctc-l{margin-bottom:4px}";document.head.appendChild(s)})();
+(function(){const s=document.createElement("style");s.textContent=".ctc-b{display:inline-block;margin:2px 6px 2px 0;padding:3px 8px;border:1px solid var(--br,#ccc);border-radius:14px;font-size:12px;text-decoration:none;white-space:nowrap}.ctc-wa{background:#1fa855;border-color:#1fa855;color:#fff!important}.ctc-ml{background:#d93025;border-color:#d93025;color:#fff!important}.ctc-b{font-weight:600}.ctc-l{margin-bottom:4px}";document.head.appendChild(s)})();
