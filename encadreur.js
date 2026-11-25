@@ -1,4 +1,4 @@
-/* ====== Encadreur : Conseiller Pédagogique, Inspecteur, IPD (lecture seule) ====== */
+/* ====== Encadreur : Conseiller Pédagogique, Inspecteur, IC (lecture seule) ====== */
 let ENC={tab:"points",sem:semDefaut(),p:null};
 async function encDemarrer(){
   app.innerHTML='<div class="card">Chargement…</div>';
@@ -76,8 +76,8 @@ async function encPoints(){
       <h3 style="margin-top:14px">Tableau de synthèse</h3><div class="scroll" id="tm"></div><p class="mut">Faites glisser le tableau pour voir toutes les colonnes.</p>
       <div id="mq"></div>
       ${blocEtabs()}
-      <h3 style="margin-top:14px">Détail</h3><div class="scroll"><table><tr><th>Collège</th><th>Disc.</th>${rows.some(x=>x.ae)?"<th>AE</th>":""}<th>Enseignant</th><th>Classe</th><th>Prévu</th><th>Réalisé</th><th>État</th><th>Motif</th></tr>
-      ${rows.map(x=>`<tr><td>${esc(x.etablissement)}</td><td>${esc(x.matiere)}</td>${rows.some(y=>y.ae)?`<td>${esc(x.ae||"")}</td>`:""}<td>${esc(x.enseignant)}</td><td>${esc(x.classe_formulaire)} ${esc(x.division)}</td><td>${x.taux_prevu}</td><td>${x.taux_realise}</td><td>${esc(ETAT[x.etat]||"")}</td><td>${esc(x.motif)}</td></tr>`).join("")}</table></div>`;
+      <h3 style="margin-top:14px">Détail</h3><p class="mut">La colonne « Écrire à l'AE » permet de contacter directement l'AE par WhatsApp ou par e-mail.</p><div class="scroll" id="det"><table><tr><th>Collège</th><th>Disc.</th>${rows.some(x=>x.ae)?"<th>AE</th>":""}<th>Écrire à l'AE</th><th>Enseignant</th><th>Classe</th><th>Prévu</th><th>Réalisé</th><th>État</th><th>Motif</th></tr>
+      ${rows.map(x=>`<tr><td>${esc(x.etablissement)}</td><td>${esc(x.matiere)}</td>${rows.some(y=>y.ae)?`<td>${esc(x.ae||"")}</td>`:""}<td class="ctc" data-e="${esc(x.etablissement)}" data-m="${esc(x.matiere)}"></td><td>${esc(x.enseignant)}</td><td>${esc(x.classe_formulaire)} ${esc(x.division)}</td><td>${x.taux_prevu}</td><td>${x.taux_realise}</td><td>${esc(ETAT[x.etat]||"")}</td><td>${esc(x.motif)}</td></tr>`).join("")}</table></div>`;
       const calc=()=>{
         const iso=$("#dt").value||dEnc;
         const dateFr=new Date(iso+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
@@ -87,7 +87,7 @@ async function encPoints(){
         $("#mq").innerHTML=S.manquants.length?`<p class="mut"><b>Collèges sans point validé :</b> ${S.manquants.map(esc).join(", ")}</p>`:"";
         return S;
       };
-      calc();brancherEtabs(rows,s,ENC.p.role==='IPD');$("#dt").onchange=calc;$("#eb").oninput=calc;
+      calc();brancherEtabs(rows,s,ENC.p.role==='IPD');ctcRemplir($("#det"),(ENC.p.nom||"l'encadreur pédagogique"),s);$("#dt").onchange=calc;$("#eb").oninput=calc;
       $("#bx").onclick=()=>dirExcel(calc());
       $("#bp").onclick=()=>dirPDF(calc());
       $("#ex").onclick=()=>telecharger("points-valides-S"+s+".csv",csv([["Collège","Discipline","AE","Matricule","Enseignant","Classe","Division","Semaine","Prévu %","Réalisé %","Écart","État","Motif"]].concat(rows.map(x=>[x.etablissement,x.matiere,x.ae||"",x.matricule,x.enseignant,x.classe_formulaire,x.division,x.semaine,x.taux_prevu,x.taux_realise,x.ecart,ETAT[x.etat]||"",x.motif]))));

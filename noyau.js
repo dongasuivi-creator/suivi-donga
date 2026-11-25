@@ -213,7 +213,7 @@ function formDefaut(code){
 }
 
 /* ====== Données de référence : un fichier par discipline (donnees/MATHS.js, ...), chargé à la demande ====== */
-const VERSION_SITE="49"
+const VERSION_SITE="50"
 const normDiv=s=>{const t=String(s||"").replace(/\s+/g,"").toUpperCase();return t};;
 const REF_MAT = {};
 function chargerScript(url){
@@ -441,7 +441,7 @@ function accueil(){
   <button class="big b1" id="a-ens">${ic("👩‍🏫","#1f4468")}<span><b>Je suis enseignant</b><small>Envoyer mon point de la semaine</small></span></button>
   <button class="big b2" id="a-ae">${ic("✅","#3a416b")}<span><b>AE, Censeur ou Directeur</b><small>Valider les points, suivre et gérer mon collège</small></span></button>
   <button class="big b3" id="a-dir">${ic("🏛️","#2c5a45")}<span><b>Direction Départementale</b><small>Tableaux de synthèse</small></span></button>
-  <button class="big b4" id="a-enc">${ic("🎓","#574a22")}<span><b>CCIP, Conseiller pédagogique, Inspecteur</b><small>Consulter les points, publier (CCIP)</small></span></button>
+  <button class="big b4" id="a-enc">${ic("🎓","#574a22")}<span><b>IC, Conseiller pédagogique, Inspecteur</b><small>Consulter les points, publier (IC)</small></span></button>
   </div>
   <div class="card"><h3>Envoyez votre point en 2 minutes</h3>
   <p class="mut">Depuis votre téléphone : choisissez votre classe, cochez les notions traitées, le calcul se fait tout seul.</p>
@@ -458,7 +458,7 @@ function accueil(){
 function connexionRole(role){
   const DEMARRER={ae:aeDemarrer,dir:dirDemarrer,enc:encDemarrer};
   if(sess&&sess.access_token){return DEMARRER[role]()}
-  app.innerHTML=`<div class="card">${entete(role==="ae"?"Connexion AE, Censeur ou Directeur":role==="enc"?"Connexion CCIP, CP ou Inspecteur":"Connexion Direction",true)}
+  app.innerHTML=`<div class="card">${entete(role==="ae"?"Connexion AE, Censeur ou Directeur":role==="enc"?"Connexion IC, CP ou Inspecteur":"Connexion Direction",true)}
   <label>Votre adresse e-mail</label><input id="em" type="email" autocomplete="email" inputmode="email" placeholder="exemple@gmail.com">
   <button id="go">Recevoir mon code</button><div id="m"></div>
   <div id="bloc2" style="display:none"><label>Code à 6 chiffres reçu par e-mail</label>

@@ -45,8 +45,8 @@ async function dirPoints(){
       <div id="mq"></div>
       ${blocEtabs()}
       ${blocSansPoint()}
-      <h3 style="margin-top:14px">Détail</h3><div class="scroll"><table><tr><th>Collège</th><th>Disc.</th><th>Enseignant</th><th>Classe</th><th>Prévu</th><th>Réalisé</th><th>État</th><th>Motif</th></tr>
-      ${rows.map(r=>`<tr><td>${esc(r.etablissement)}</td><td>${esc(r.matiere)}</td><td>${esc(r.enseignant)}</td><td>${esc(r.classe_formulaire)} ${esc(r.division)}</td><td>${r.taux_prevu}</td><td>${r.taux_realise}</td><td>${esc(ETAT[r.etat]||"")}</td><td>${esc(r.motif)}</td></tr>`).join("")}</table></div>`;
+      <h3 style="margin-top:14px">Détail</h3><p class="mut">La colonne « Écrire à l'AE » permet de contacter directement l'AE par WhatsApp ou par e-mail.</p><div class="scroll" id="det"><table><tr><th>Collège</th><th>Disc.</th><th>Écrire à l'AE</th><th>Enseignant</th><th>Classe</th><th>Prévu</th><th>Réalisé</th><th>État</th><th>Motif</th></tr>
+      ${rows.map(r=>`<tr><td>${esc(r.etablissement)}</td><td>${esc(r.matiere)}</td><td class="ctc" data-e="${esc(r.etablissement)}" data-m="${esc(r.matiere)}"></td><td>${esc(r.enseignant)}</td><td>${esc(r.classe_formulaire)} ${esc(r.division)}</td><td>${r.taux_prevu}</td><td>${r.taux_realise}</td><td>${esc(ETAT[r.etat]||"")}</td><td>${esc(r.motif)}</td></tr>`).join("")}</table></div>`;
       const calc=()=>{
         const iso=$("#dt").value||dEnc;
         const dateFr=new Date(iso+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
@@ -55,7 +55,7 @@ async function dirPoints(){
         $("#mq").innerHTML=S.manquants.length?`<p class="mut"><b>Collèges sans point validé :</b> ${S.manquants.map(esc).join(", ")}</p>`:"";
         return S;
       };
-      calc();brancherEtabs(rows,s,true);brancherSansPoint(s,rows,etabsF);
+      calc();brancherEtabs(rows,s,true);brancherSansPoint(s,rows,etabsF);ctcRemplir($("#det"),"la Direction départementale",s);
       $("#dt").onchange=calc;$("#eb").oninput=calc;
       $("#bx").onclick=()=>dirExcel(calc());
       $("#bp").onclick=()=>dirPDF(calc());
@@ -218,8 +218,8 @@ async function dirAdm(){
 }
 
 
-/* Encadreurs : Conseillers Pédagogiques (par commune et discipline), Inspecteurs (par discipline), IPD (toutes disciplines) */
-const ROLE_ENC={CP:"Conseiller pédagogique",INSPECTEUR:"Inspecteur",IPD:"CCIP · Inspecteur Pédagogique Départemental"};
+/* Encadreurs : Conseillers Pédagogiques (par commune et discipline), Inspecteurs (par discipline), IC (toutes disciplines ; code interne IPD) */
+const ROLE_ENC={CP:"Conseiller pédagogique",INSPECTEUR:"Inspecteur",IPD:"IC · Inspecteur Coordinateur"};
 function libPortee(x){
   if(x.role==="IPD")return "toutes les disciplines, toute la Donga";
   return (NOM_MAT[x.matiere]||x.matiere)+(x.commune?" – commune de "+x.commune:" – toute la Donga");
@@ -230,8 +230,8 @@ async function dirEnc(){
     let a=await rpc("lister_encadreurs",{});
     z.innerHTML=`<div class="card"><h3>Ajouter des encadreurs</h3>
     <p class="mut">Ils consultent en lecture seule les points validés et les communiqués de leur périmètre. Ils se connectent avec leur adresse e-mail (code à 6 chiffres) par le bouton « Conseiller pédagogique, Inspecteur ». Une ligne par personne : <b>e-mail ; nom ; rôle ; discipline ; commune</b>.</p>
-    <ul class="mut"><li><b>CP</b> : discipline et commune obligatoires (Djougou, Bassila, Copargo, Ouaké).</li><li><b>Inspecteur</b> : discipline obligatoire, toute la Donga.</li><li><b>IPD</b> = membre du CCIP (Inspecteur Pédagogique Départemental) : ni discipline ni commune, il voit tout.</li></ul>
-    <textarea id="t" rows="5" placeholder="cp1@gmail.com ; KOFFI Jean ; CP ; Mathématiques ; Djougou&#10;insp1@gmail.com ; ADJO Marie ; Inspecteur ; PCT&#10;ipd@gmail.com ; TOKO Paul ; IPD"></textarea>
+    <ul class="mut"><li><b>CP</b> : discipline et commune obligatoires (Djougou, Bassila, Copargo, Ouaké).</li><li><b>Inspecteur</b> : discipline obligatoire, toute la Donga.</li><li><b>IC</b> = Inspecteur Coordinateur : ni discipline ni commune, il voit tout.</li></ul>
+    <textarea id="t" rows="5" placeholder="cp1@gmail.com ; KOFFI Jean ; CP ; Mathématiques ; Djougou&#10;insp1@gmail.com ; ADJO Marie ; Inspecteur ; PCT&#10;ic@gmail.com ; TOKO Paul ; IC"></textarea>
     <label>Ou choisir un fichier (.csv, .txt)</label><input type="file" id="fi" accept=".csv,.txt,text/csv,text/plain">
     <button id="ad">Enregistrer</button><div id="m"></div></div>
     <div class="card"><h3>Encadreurs inscrits <span id="cnt"></span></h3><input id="fq" placeholder="Rechercher (nom, rôle, discipline, commune, e-mail)"><div id="lst"></div></div>`;
@@ -258,7 +258,7 @@ async function dirEnc(){
         r=r.trim();if(!r)return;
         const c=(/[;\t]/.test(r)?r.split(/[;\t]/):r.split(",")).map(y=>y.trim().replace(/^"|"$/g,""));
         if(!c[0]||c[0].indexOf("@")<0){ign++;return}
-        l.push({email:c[0],nom:c[1]||"",role:c[2]||"",matiere:c[3]||"",commune:c[4]||""});
+        l.push({email:c[0],nom:c[1]||"",role:/^(IC|IPD)$/i.test(c[2]||"")?"IPD":(c[2]||""),matiere:c[3]||"",commune:c[4]||""});
       });
       if(!l.length)return note(m,"Rien à enregistrer : aucune ligne avec une adresse e-mail");
       $("#ad").disabled=true;
